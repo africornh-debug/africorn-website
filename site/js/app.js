@@ -8,8 +8,8 @@
   var INFO = 'info@africorn-ios.co.za';
 
   /* ------------------------------------------------------------------ illustrations */
-  var INK = '#0c2233', MAIZE = '#f0b429', RUST = '#b8432a', SEA = '#0f5e6b', LITE = '#1b8a8f', PALE = '#e6ecec';
-  var BOX = [RUST, MAIZE, LITE, '#2f5d8a', '#d9772b', PALE, '#3e7c4f'];
+  var INK = '#0b1038', MAIZE = '#f5b841', RUST = '#d53132', SEA = '#1012d9', LITE = '#367c4a', PALE = '#eceef6';
+  var BOX = [RUST, MAIZE, LITE, '#1012d9', '#e8862e', PALE, '#5a6ff0'];
 
   function box(x, y, w, h, c) {
     return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + c + '"/>' +
@@ -23,10 +23,10 @@
     return out;
   }
   function ship() {
-    return '<path d="M4 100H560L524 164H34Q8 160 4 100Z" fill="#1d4257"/>' +
+    return '<path d="M4 100H560L524 164H34Q8 160 4 100Z" fill="#1b2580"/>' +
       '<path d="M14 146H534L524 164H34Q20 161 14 146Z" fill="' + RUST + '"/>' +
       '<rect x="30" y="34" width="72" height="66" fill="' + PALE + '"/>' +
-      '<rect x="36" y="44" width="60" height="7" fill="' + INK + '"/><rect x="36" y="60" width="60" height="5" fill="#7f97a0"/><rect x="36" y="74" width="60" height="5" fill="#7f97a0"/>' +
+      '<rect x="36" y="44" width="60" height="7" fill="' + INK + '"/><rect x="36" y="60" width="60" height="5" fill="#8a90b8"/><rect x="36" y="74" width="60" height="5" fill="#8a90b8"/>' +
       '<rect x="52" y="6" width="24" height="28" fill="' + MAIZE + '"/><rect x="52" y="14" width="24" height="6" fill="' + INK + '"/>' +
       '<rect x="92" y="2" width="3" height="32" fill="' + PALE + '"/>' +
       stack(114, 100, [3, 4, 4, 5, 5, 5, 4, 4, 3, 2], 40, 18, 1) +
@@ -43,16 +43,16 @@
       '<path d="M-146-192V-150M-124-192V-150" stroke="' + PALE + '" stroke-width="1.5"/>' + box(-157, -150, 44, 18, RUST) + '</g>';
   }
   function truck(c) {
-    return '<rect x="0" y="-24" width="162" height="7" fill="#0a1822"/>' + box(4, -66, 152, 42, c || LITE) +
+    return '<rect x="0" y="-24" width="162" height="7" fill="#060822"/>' + box(4, -66, 152, 42, c || LITE) +
       '<path d="M168-17V-62H204L226-40V-17Z" fill="' + PALE + '"/><path d="M192-57H202L217-42H192Z" fill="' + SEA + '"/>' +
-      '<rect x="160" y="-24" width="68" height="8" fill="#0a1822"/>' +
-      [22, 46, 150, 208].map(function (x) { return '<circle cx="' + x + '" cy="-10" r="11" fill="#081520"/><circle cx="' + x + '" cy="-10" r="4" fill="#8fa3ab"/>'; }).join('');
+      '<rect x="160" y="-24" width="68" height="8" fill="#060822"/>' +
+      [22, 46, 150, 208].map(function (x) { return '<circle cx="' + x + '" cy="-10" r="11" fill="#060822"/><circle cx="' + x + '" cy="-10" r="4" fill="#9aa0c4"/>'; }).join('');
   }
   function warehouse() {
     var doors = [22, 100, 178].map(function (x, i) {
       return i === 1
-        ? '<rect x="' + x + '" y="-74" width="60" height="74" fill="#081520"/>' + box(x + 6, -22, 22, 20, '#c98f4a') + box(x + 31, -22, 22, 20, '#c98f4a') + box(x + 18, -43, 22, 20, MAIZE)
-        : '<rect x="' + x + '" y="-74" width="60" height="74" fill="#9fb2b8"/><rect x="' + x + '" y="-74" width="60" height="74" fill="url(#slat)"/>';
+        ? '<rect x="' + x + '" y="-74" width="60" height="74" fill="#060822"/>' + box(x + 6, -22, 22, 20, '#c98f4a') + box(x + 31, -22, 22, 20, '#c98f4a') + box(x + 18, -43, 22, 20, MAIZE)
+        : '<rect x="' + x + '" y="-74" width="60" height="74" fill="#a9aecb"/><rect x="' + x + '" y="-74" width="60" height="74" fill="url(#slat)"/>';
     }).join('');
     return '<rect x="0" y="-116" width="260" height="116" fill="' + PALE + '"/><rect x="0" y="-116" width="260" height="116" fill="url(#corr)" opacity=".35"/>' +
       '<path d="M-8-116 130-154 268-116Z" fill="' + LITE + '"/><rect x="-8" y="-118" width="276" height="8" fill="' + SEA + '"/>' +
@@ -68,10 +68,10 @@
   if (hero) {
     hero.innerHTML =
       '<circle cx="330" cy="372" r="178" fill="' + MAIZE + '"/>' +
-      '<path d="M900 372C1020 300 1120 318 1230 288C1360 252 1500 300 1680 262V372Z" fill="#12384f"/>' +
+      '<path d="M900 372C1020 300 1120 318 1230 288C1360 252 1500 300 1680 262V372Z" fill="#141b55"/>' +
       '<g class="a-ship">' + ship() + '</g>' +
       '<rect x="0" y="372" width="640" height="68" fill="' + SEA + '"/>' + waves(0, 620, 372) +
-      '<rect x="600" y="360" width="1080" height="80" fill="#24404f"/><rect x="600" y="360" width="1080" height="5" fill="#53717f"/>' +
+      '<rect x="600" y="360" width="1080" height="80" fill="#232a5c"/><rect x="600" y="360" width="1080" height="5" fill="#565e96"/>' +
       '<path d="M600 404H1680" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="28 22" opacity=".7"/>' +
       '<g transform="translate(650 360)">' + crane() + '</g>' +
       stack(800, 360, [2, 4, 3, 4, 2], 58, 25, 2) +
@@ -88,7 +88,7 @@
       return '<rect width="520" height="190" fill="' + INK + '"/>' + stack(330, 176, [2, 3, 1], 56, 26, 3) +
         '<g transform="rotate(-5 150 100)"><rect x="70" y="22" width="150" height="180" fill="#fff"/>' +
         '<rect x="86" y="40" width="70" height="9" fill="' + INK + '"/>' +
-        [64, 78, 92, 106, 120, 134].map(function (y, i) { return '<rect x="86" y="' + y + '" width="' + (i % 2 ? 96 : 118) + '" height="4" fill="#b9c6ca"/>'; }).join('') + '</g>' +
+        [64, 78, 92, 106, 120, 134].map(function (y, i) { return '<rect x="86" y="' + y + '" width="' + (i % 2 ? 96 : 118) + '" height="4" fill="#c3c7da"/>'; }).join('') + '</g>' +
         '<g transform="rotate(-14 236 118)"><circle cx="236" cy="118" r="42" fill="none" stroke="' + RUST + '" stroke-width="5"/><circle cx="236" cy="118" r="33" fill="none" stroke="' + RUST + '" stroke-width="1.5"/>' +
         '<text x="236" y="123" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="15" letter-spacing="1.5" fill="' + RUST + '">RELEASED</text></g>';
     },
@@ -97,14 +97,14 @@
         '<g transform="translate(70 50) scale(.66)">' + ship() + '</g><rect y="150" width="520" height="40" fill="' + SEA + '"/>' + waves(0, 520, 142);
     },
     warehouse: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/><rect y="168" width="520" height="22" fill="#24404f"/>' +
+      return '<rect width="520" height="190" fill="' + INK + '"/><rect y="168" width="520" height="22" fill="#232a5c"/>' +
         '<g transform="translate(60 168)">' + warehouse() + '</g>' + box(370, 142, 30, 26, '#c98f4a') + box(403, 142, 30, 26, MAIZE) + box(386, 115, 30, 26, '#c98f4a') +
         box(450, 142, 30, 26, '#c98f4a') + '<rect x="364" y="166" width="124" height="4" fill="#8a6a3c"/>';
     },
     transport: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/><path d="M0 150C90 96 170 120 260 98C350 76 430 110 520 84V190H0Z" fill="#12384f"/>' +
-        '<rect y="152" width="520" height="38" fill="#24404f"/><path d="M0 172H520" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="26 20"/>' +
-        '<rect x="438" y="70" width="5" height="84" fill="#8fa3ab"/><rect x="412" y="52" width="58" height="36" rx="3" fill="#2a7d46" stroke="#fff" stroke-width="2"/>' +
+      return '<rect width="520" height="190" fill="' + INK + '"/><path d="M0 150C90 96 170 120 260 98C350 76 430 110 520 84V190H0Z" fill="#141b55"/>' +
+        '<rect y="152" width="520" height="38" fill="#232a5c"/><path d="M0 172H520" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="26 20"/>' +
+        '<rect x="438" y="70" width="5" height="84" fill="#9aa0c4"/><rect x="412" y="52" width="58" height="36" rx="3" fill="#367c4a" stroke="#fff" stroke-width="2"/>' +
         '<text x="441" y="78" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="22" fill="#fff">N3</text>' +
         '<g transform="translate(110 162)">' + truck(RUST) + '</g>';
     }
