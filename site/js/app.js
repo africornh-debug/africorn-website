@@ -39,8 +39,8 @@
       '<rect x="0" y="-128" width="102" height="8"/><rect x="-196" y="-212" width="340" height="11"/>' +
       '<rect x="46" y="-268" width="8" height="60"/><rect x="22" y="-234" width="58" height="22" fill="' + PALE + '"/></g>' +
       '<g stroke="' + y + '" stroke-width="4" fill="none"><path d="M50-266-170-212M50-266 136-212M5-128 97-204M97-128 5-204"/></g>' +
-      '<g class="a-trolley"><rect x="-150" y="-201" width="30" height="9" fill="' + INK + '" stroke="' + y + '" stroke-width="2"/>' +
-      '<path d="M-146-192V-150M-124-192V-150" stroke="' + PALE + '" stroke-width="1.5"/>' + box(-157, -150, 44, 18, RUST) + '</g>';
+      '<g class="trolley-follow"><g class="a-trolley"><rect x="-150" y="-201" width="30" height="9" fill="' + INK + '" stroke="' + y + '" stroke-width="2"/>' +
+      '<path d="M-146-192V-150M-124-192V-150" stroke="' + PALE + '" stroke-width="1.5"/>' + box(-157, -150, 44, 18, RUST) + '</g></g>';
   }
   function truck(c) {
     return '<rect x="0" y="-24" width="162" height="7" fill="#060822"/>' + box(4, -66, 152, 42, c || LITE) +
@@ -67,9 +67,9 @@
   var hero = $('#heroScene');
   if (hero) {
     hero.innerHTML =
-      '<circle cx="330" cy="372" r="178" fill="' + MAIZE + '"/>' +
-      '<path d="M900 372C1020 300 1120 318 1230 288C1360 252 1500 300 1680 262V372Z" fill="#141b55"/>' +
-      '<g class="a-ship">' + ship() + '</g>' +
+      '<g data-depth="-14"><circle cx="330" cy="372" r="178" fill="' + MAIZE + '"/></g>' +
+      '<g data-depth="-8"><path d="M860 372C1020 300 1120 318 1230 288C1360 252 1500 300 1720 262V372Z" fill="#141b55"/></g>' +
+      '<g data-depth="10"><g class="a-ship">' + ship() + '</g></g>' +
       '<rect x="0" y="372" width="640" height="68" fill="' + SEA + '"/>' + waves(0, 620, 372) +
       '<rect x="600" y="360" width="1080" height="80" fill="#232a5c"/><rect x="600" y="360" width="1080" height="5" fill="#565e96"/>' +
       '<path d="M600 404H1680" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="28 22" opacity=".7"/>' +
@@ -379,6 +379,69 @@
     $('#quizAgain').addEventListener('click', startQuiz);
   }
   if (quizBox) startQuiz();
+
+  /* ------------------------------------------------------------------ cursor effects
+     Only for a mouse or trackpad, and only when the visitor has not asked for reduced motion. */
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canHover && !calm) {
+    document.documentElement.classList.add('has-cursor');
+    var raf = function (fn) { var busy = false, last; return function (ev) { last = ev; if (busy) return; busy = true; requestAnimationFrame(function () { busy = false; fn(last); }); }; };
+
+    /* a soft light that follows the cursor across the dark bands */
+    $$('.hero, .band--dark, .band--sea').forEach(function (el) {
+      el.classList.add('glow');
+      el.addEventListener('pointermove', raf(function (ev) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+        el.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      }));
+    });
+
+    /* hero: the scene shifts in layers, and the crane trolley tracks the cursor */
+    var heroBox = $('.hero');
+    if (heroBox && hero) {
+      var layers = $$('[data-depth]', hero), follow = $('.trolley-follow', hero);
+      heroBox.addEventListener('pointermove', raf(function (ev) {
+        var r = heroBox.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5, py = (ev.clientY - r.top) / r.height - 0.5;
+        layers.forEach(function (g) { var d = +g.getAttribute('data-depth'); g.style.transform = 'translate(' + (px * d * 2).toFixed(1) + 'px,' + (py * d * 0.6).toFixed(1) + 'px)'; });
+        var m = hero.getScreenCTM();
+        if (m && follow) {
+          var x = (ev.clientX - m.e) / m.a - 650 + 135;
+          follow.classList.add('on');
+          follow.style.transform = 'translateX(' + Math.max(0, Math.min(262, x)).toFixed(1) + 'px)';
+        }
+      }));
+      heroBox.addEventListener('pointerleave', function () {
+        layers.forEach(function (g) { g.style.transform = ''; });
+        if (follow) { follow.classList.remove('on'); follow.style.transform = ''; }
+      });
+    }
+
+    /* cards lean toward the cursor and catch the light */
+    $$('.svc, .story, .gl-grid').forEach(function (el) {
+      var grid = el.classList.contains('gl-grid');
+      el.addEventListener('pointermove', raf(function (ev) {
+        var card = grid ? (ev.target.closest && ev.target.closest('.gl-card')) : el;
+        if (!card) return;
+        var r = card.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width, y = (ev.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+        if (!grid) card.style.transform = 'perspective(900px) rotateX(' + ((0.5 - y) * 3).toFixed(2) + 'deg) rotateY(' + ((x - 0.5) * 3).toFixed(2) + 'deg)';
+      }));
+      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+    });
+
+    /* main buttons pull slightly toward the cursor */
+    $$('.btn--go').forEach(function (b) {
+      b.addEventListener('pointermove', raf(function (ev) {
+        var r = b.getBoundingClientRect();
+        b.style.transform = 'translate(' + ((ev.clientX - r.left - r.width / 2) * 0.12).toFixed(1) + 'px,' + ((ev.clientY - r.top - r.height / 2) * 0.2).toFixed(1) + 'px)';
+      }));
+      b.addEventListener('pointerleave', function () { b.style.transform = ''; });
+    });
+  }
 
   /* ------------------------------------------------------------------ nav, tabs */
   var navToggle = $('#navToggle'), nav = $('#nav');

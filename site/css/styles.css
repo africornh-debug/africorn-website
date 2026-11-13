@@ -340,6 +340,24 @@ dialog.term-dlg::backdrop { background: rgba(6, 20, 31, .62); }
 .dlg-body .eg { color: var(--text); border-top: 1px dashed var(--line); padding-top: 10px; font-size: .95rem; }
 .dlg-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 14px 24px; background: var(--paper); border-top: 1px solid var(--line); }
 
+/* cursor effects (classes are added by app.js for mouse users only) */
+.glow { position: relative; }
+.glow::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0; transition: opacity .4s ease;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(120, 138, 255, .2), transparent 65%); }
+.glow:hover::before { opacity: 1; }
+.glow > * { position: relative; z-index: 1; }
+.hero-scene [data-depth], .trolley-follow { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.trolley-follow.on .a-trolley { animation: none; }
+.has-cursor .svc, .has-cursor .story { position: relative; transition: transform .25s ease, box-shadow .25s ease; will-change: transform; }
+.has-cursor .svc:hover, .has-cursor .story:hover { box-shadow: 0 18px 40px rgba(11, 16, 56, .16); }
+.has-cursor .gl-card { position: relative; transition: border-color .2s ease, transform .2s ease; }
+.has-cursor .gl-card:hover { border-color: var(--sea); transform: translateY(-3px); }
+.has-cursor .svc::after, .has-cursor .story::after, .has-cursor .gl-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; opacity: 0; transition: opacity .25s ease;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 184, 65, .22), transparent 70%); }
+.has-cursor .svc:hover::after, .has-cursor .story:hover::after, .has-cursor .gl-card:hover::after { opacity: 1; }
+.has-cursor .svc-art { transition: transform .4s ease; }
+.has-cursor .svc:hover .svc-art { transform: scale(1.04); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
