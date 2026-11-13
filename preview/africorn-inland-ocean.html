@@ -1,0 +1,1193 @@
+<title>Africorn Inland Ocean</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: one shipment's route, ocean to inland. Dark "sea" bands for the brand
+   moments, pale "paper" bands for reading, container-plate labels in mono type. */
+:root {
+  /* PROVISIONAL BRAND PALETTE: swap these six values once the logo colours are confirmed */
+  --ink: #0c2233;        /* deep sea navy: dark bands, headings */
+  --sea: #0f5e6b;        /* teal: secondary brand colour */
+  --sea-lite: #1b8a8f;
+  --maize: #f0b429;      /* corn gold: calls to action, highlights */
+  --rust: #b8432a;       /* container red: sparing accents */
+  --paper: #f1f5f4;      /* page background */
+
+  --card: #ffffff;
+  --text: #13242f;
+  --muted: #4d616c;
+  --line: #d3dcdc;
+  --on-dark: #eef4f4;
+  --on-dark-muted: #a9bec6;
+  --dark-line: #2a4354;
+  --ok: #1d7a4c;
+  --bad: #b3261e;
+
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --r: 6px;
+  --gap: clamp(16px, 2.4vw, 28px);
+  --band: clamp(56px, 8vw, 104px);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0; background: var(--paper); color: var(--text);
+  font: 400 17px/1.6 var(--f-body); -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--ink); }
+img, svg { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; line-height: 1.02; margin: 0; text-wrap: balance; letter-spacing: .005em; }
+h1 { font-size: clamp(2.9rem, 7.4vw, 5.6rem); text-transform: uppercase; }
+h2 { font-size: clamp(2.1rem, 4.6vw, 3.4rem); text-transform: uppercase; }
+h3 { font-size: 1.6rem; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--maize); outline-offset: 2px; }
+.band--dark :focus-visible, .site-head :focus-visible { outline-color: #fff; }
+
+.wrap {
+  max-width: 1200px; margin-inline: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.band { padding-block: var(--band); }
+.band--dark { background: var(--ink); color: var(--on-dark); }
+.band--sea { background: var(--sea); color: #fff; }
+.band--white { background: var(--card); }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--maize); color: var(--ink); padding: 10px 14px; z-index: 100; font-weight: 600; }
+.skip:focus { left: 12px; }
+
+/* container-plate label */
+.plate {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 500 .78rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sea); margin-bottom: 18px;
+}
+.plate::before { content: ""; width: 26px; height: 10px; background: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 6px); }
+.band--dark .plate, .band--sea .plate, .hero .plate { color: var(--maize); }
+.lede { font-size: 1.14rem; color: var(--muted); max-width: 62ch; margin-top: 16px; }
+.band--dark .lede { color: var(--on-dark-muted); }
+.band--sea .lede { color: #d8ecec; }
+.sec-head { margin-bottom: clamp(28px, 4vw, 48px); }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 22px; border-radius: var(--r); border: 2px solid transparent;
+  font: 600 1rem/1 var(--f-body); text-decoration: none; transition: transform .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--go { background: var(--maize); color: var(--ink); }
+.btn--go:hover { background: #ffc94a; }
+.btn--line { border-color: currentColor; background: transparent; color: inherit; }
+.btn--line:hover { background: rgba(127, 160, 170, .16); }
+.btn--ink { background: var(--ink); color: #fff; }
+.btn--ink:hover { background: #163449; }
+.btn--sm { min-height: 40px; padding: 0 14px; font-size: .92rem; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* header */
+.site-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--ink); color: var(--on-dark); border-bottom: 1px solid var(--dark-line); }
+.site-head .wrap { display: flex; align-items: center; gap: 20px; min-height: 68px; }
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
+.logo-mark { width: 40px; height: 40px; flex: none; }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-text b { font: 700 1.5rem/1 var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.logo-text span { font: 500 .62rem/1 var(--f-mono); letter-spacing: .26em; text-transform: uppercase; color: var(--maize); margin-top: 4px; }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a { text-decoration: none; padding: 10px 12px; border-radius: var(--r); font-weight: 500; font-size: .95rem; color: var(--on-dark-muted); }
+.nav a:hover { color: #fff; background: rgba(255, 255, 255, .07); }
+.nav-toggle { display: none; background: none; border: 1px solid var(--dark-line); border-radius: var(--r); width: 46px; height: 46px; color: #fff; }
+.nav-toggle svg { width: 22px; height: 22px; }
+@media (max-width: 960px) {
+  .nav-toggle { display: inline-grid; place-items: center; }
+  .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--ink); border-bottom: 1px solid var(--dark-line); flex-direction: column; align-items: stretch; padding: 8px 20px 16px; }
+  .nav.open { display: flex; }
+  .nav a { padding: 14px 8px; font-size: 1.05rem; border-bottom: 1px solid var(--dark-line); border-radius: 0; }
+  .head-cta { display: none; }
+}
+
+/* hero */
+.hero { background: var(--ink); color: var(--on-dark); position: relative; overflow: hidden; }
+.hero > .wrap { position: relative; z-index: 2; padding-top: clamp(40px, 6vw, 80px); }
+.hero h1 em { font-style: normal; color: var(--maize); }
+.hero-sub { font-size: clamp(1.08rem, 1.6vw, 1.28rem); color: var(--on-dark-muted); max-width: 54ch; margin-top: 22px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero-scene { display: block; width: 100%; height: auto; aspect-ratio: 1680 / 440; margin-top: clamp(8px, 2vw, 24px); }
+@media (max-width: 700px) { .hero-scene { aspect-ratio: 860 / 380; } }
+.ticker { background: var(--maize); color: var(--ink); font: 600 .84rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
+.ticker ul { list-style: none; margin: 0; padding: 14px 0; display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.ticker li { display: flex; align-items: center; gap: 10px; }
+.ticker li::before { content: ""; width: 8px; height: 8px; background: var(--ink); }
+
+@keyframes bob { 0%, 100% { transform: translate(20px, 222px); } 50% { transform: translate(20px, 226px); } }
+@keyframes drive { 0% { transform: translate(1090px, 360px); opacity: 0; } 5% { opacity: 1; } 100% { transform: translate(1425px, 360px); opacity: 1; } }
+@keyframes trolley { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(150px); } }
+.a-ship { transform: translate(20px, 222px); animation: bob 6s ease-in-out infinite; }
+.a-truck { transform: translate(1130px, 360px); animation: drive 16s linear infinite; }
+.a-trolley { animation: trolley 12s ease-in-out infinite; }
+
+/* services */
+.svc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
+.svc { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.svc-art { background: var(--ink); display: block; width: 100%; height: 190px; }
+.svc-body { padding: clamp(20px, 2.6vw, 30px); display: flex; flex-direction: column; gap: 14px; }
+.svc-body h3 { font-size: 1.9rem; text-transform: uppercase; }
+.svc-body p { color: var(--muted); }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ticks li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; }
+.ticks li::before { content: ""; width: 12px; height: 12px; margin-top: 8px; background: var(--maize); border: 2px solid var(--ink); }
+.haul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.haul div { border: 1px dashed var(--line); border-radius: var(--r); padding: 12px 14px; }
+.haul b { font: 700 1.15rem/1.1 var(--f-display); text-transform: uppercase; display: block; margin-bottom: 4px; }
+.haul span { font-size: .93rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; align-items: center; }
+.chips-label { font: 500 .72rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); width: 100%; }
+.term {
+  font: 500 .86rem/1 var(--f-mono); padding: 8px 10px; min-height: 34px; border-radius: 4px;
+  border: 1px solid var(--line); background: var(--paper); color: var(--sea); text-decoration: underline dotted; text-underline-offset: 3px;
+}
+.term:hover { border-color: var(--sea); background: #e3eeee; }
+.band--dark .term { background: #132f43; border-color: var(--dark-line); color: var(--maize); }
+.band--dark .term:hover { border-color: var(--maize); background: #193a52; }
+@media (max-width: 820px) { .svc-grid { grid-template-columns: 1fr; } }
+
+/* journey */
+.route { list-style: none; margin: 0 0 var(--gap); padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; position: relative; }
+.route::before { content: ""; position: absolute; left: 0; right: 0; top: 21px; border-top: 2px dashed var(--dark-line); }
+.route li { position: relative; display: flex; justify-content: center; }
+.stop { background: none; border: 0; padding: 0 4px; color: var(--on-dark-muted); display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.stop i { font: 600 .95rem/1 var(--f-mono); font-style: normal; width: 44px; height: 44px; display: grid; place-items: center; background: var(--ink); border: 2px solid var(--dark-line); border-radius: 4px; transition: background-color .2s, border-color .2s, color .2s; }
+.stop span { font: 600 1.02rem/1.1 var(--f-display); letter-spacing: .04em; text-transform: uppercase; text-align: center; }
+.stop:hover i { border-color: var(--maize); }
+.stop[aria-selected="true"] { color: #fff; }
+.stop[aria-selected="true"] i { background: var(--maize); border-color: var(--maize); color: var(--ink); }
+.stop.done i { border-color: var(--sea-lite); color: var(--sea-lite); }
+.leg { background: #112c3f; border: 1px solid var(--dark-line); border-radius: var(--r); padding: clamp(20px, 3vw, 36px); display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: var(--gap); }
+.leg h3 { font-size: clamp(1.8rem, 3vw, 2.4rem); text-transform: uppercase; color: #fff; }
+.leg p { color: var(--on-dark-muted); margin-top: 12px; }
+.leg-us { border-left: 3px solid var(--maize); padding-left: 16px; margin-top: 20px; }
+.leg-us b { font: 500 .74rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--maize); display: block; margin-bottom: 6px; }
+.leg-us p { color: var(--on-dark); margin: 0; }
+.leg-nav { display: flex; gap: 10px; margin-top: 24px; }
+.leg-side .chips { margin-top: 12px; }
+.leg-side .chips-label { color: var(--on-dark-muted); }
+@media (max-width: 820px) {
+  .route { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .stop span { display: none; }
+  .leg { grid-template-columns: 1fr; }
+}
+
+/* incoterms */
+.inco-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.inco-tab { font: 700 1.25rem/1 var(--f-display); letter-spacing: .06em; min-height: 46px; min-width: 64px; padding: 0 14px; background: var(--card); border: 2px solid var(--line); border-radius: var(--r); color: var(--muted); }
+.inco-tab:hover { border-color: var(--sea); color: var(--sea); }
+.inco-tab[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--maize); }
+.inco { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: var(--gap); align-items: start; }
+.inco-about h3 { font-size: 2rem; text-transform: uppercase; }
+.inco-about p { color: var(--muted); margin-top: 10px; }
+.inco-risk { margin-top: 16px; padding: 14px 16px; background: var(--paper); border-radius: var(--r); border: 1px solid var(--line); }
+.inco-risk b { font: 500 .74rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--rust); display: block; margin-bottom: 6px; }
+.inco-rows { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); }
+.inco-rows li { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.inco-rows li:last-child { border-bottom: 0; }
+.inco-rows li.risk-here { box-shadow: inset 0 -3px 0 var(--rust); }
+.who { font: 600 .78rem/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; padding: 7px 10px; border-radius: 4px; min-width: 86px; text-align: center; transition: background-color .25s, color .25s; }
+.who--s { background: var(--sea); color: #fff; }
+.who--b { background: var(--maize); color: var(--ink); }
+.who--o { background: var(--paper); color: var(--muted); border: 1px dashed var(--line); }
+.inco-key { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: .9rem; color: var(--muted); align-items: center; }
+.note { font-size: .88rem; color: var(--muted); margin-top: 14px; }
+@media (max-width: 820px) { .inco { grid-template-columns: 1fr; } }
+
+/* calculator */
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gap); align-items: stretch; }
+.calc-form, .calc-out { border-radius: var(--r); padding: clamp(20px, 3vw, 32px); }
+.calc-form { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .22); }
+.calc-out { background: var(--ink); color: var(--on-dark); display: flex; flex-direction: column; gap: 16px; }
+.calc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.calc-grid .span2 { grid-column: span 2; }
+.big { font: 700 clamp(3rem, 7vw, 4.6rem)/.9 var(--f-display); color: var(--maize); font-variant-numeric: tabular-nums; }
+.big small { font-size: .38em; letter-spacing: .08em; color: var(--on-dark-muted); margin-left: 8px; }
+.calc-stats { display: flex; flex-wrap: wrap; gap: 8px 28px; font: 500 .9rem/1.4 var(--f-mono); color: var(--on-dark-muted); }
+.calc-stats b { color: #fff; font-weight: 600; }
+.fill { height: 46px; border: 2px solid var(--on-dark-muted); border-radius: 4px; position: relative; overflow: hidden; background: repeating-linear-gradient(90deg, transparent 0 9px, rgba(255, 255, 255, .06) 9px 10px); }
+.fill i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--sea-lite); transition: width .4s ease; }
+.fill span { position: absolute; inset: 0; display: grid; place-items: center; font: 600 .8rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: #fff; }
+.calc-advice { color: var(--on-dark); }
+.calc-out .btn { align-self: flex-start; margin-top: auto; }
+@media (max-width: 820px) { .calc { grid-template-columns: 1fr; } }
+@media (max-width: 460px) { .calc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .calc-grid .span2 { grid-column: span 2; } }
+
+/* forms */
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font: 500 .76rem/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 48px; padding: 10px 12px; border-radius: var(--r);
+  border: 1.5px solid var(--line); background: var(--card); color: var(--text); font-size: 1rem;
+}
+.field textarea { min-height: 110px; resize: vertical; }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--sea); }
+.field .err { color: var(--bad); font-size: .86rem; min-height: 0; }
+.field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--bad); }
+.band--sea .field label { color: #fff; }
+.req { color: var(--rust); }
+.band--sea .req { color: var(--maize); }
+
+/* glossary */
+.gl-tools { display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 16px; align-items: end; margin-bottom: 24px; }
+.gl-cats { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat { font: 500 .8rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; min-height: 40px; padding: 0 14px; border: 1.5px solid var(--line); background: var(--card); border-radius: 100px; color: var(--muted); }
+.cat:hover { border-color: var(--sea); color: var(--sea); }
+.cat[aria-pressed="true"] { background: var(--sea); border-color: var(--sea); color: #fff; }
+.gl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.gl-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.gl-card h3 { font-size: 1.45rem; }
+.gl-card .tag { font: 500 .68rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sea); }
+.gl-card p { color: var(--muted); font-size: .97rem; }
+.gl-card .eg { font-size: .9rem; color: var(--text); border-top: 1px dashed var(--line); padding-top: 8px; }
+.gl-count { font: 500 .8rem/1 var(--f-mono); color: var(--muted); margin-bottom: 14px; }
+.gl-more { margin-top: 20px; }
+.gl-empty { padding: 28px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); }
+@media (max-width: 720px) { .gl-tools { grid-template-columns: 1fr; } }
+
+/* quiz */
+.quiz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: var(--gap); align-items: start; }
+.quiz-box { background: #112c3f; border: 1px solid var(--dark-line); border-radius: var(--r); padding: clamp(20px, 3vw, 34px); min-height: 380px; display: flex; flex-direction: column; gap: 18px; }
+.quiz-meta { display: flex; justify-content: space-between; gap: 12px; font: 500 .8rem/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-dark-muted); }
+.quiz-bar { height: 6px; background: var(--dark-line); border-radius: 3px; overflow: hidden; }
+.quiz-bar i { display: block; height: 100%; width: 0; background: var(--maize); transition: width .3s ease; }
+.quiz-q { font-size: 1.22rem; color: #fff; line-height: 1.45; }
+.quiz-q small { display: block; font: 500 .74rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--maize); margin-bottom: 10px; }
+.quiz-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.opt { min-height: 56px; padding: 10px 14px; text-align: left; background: var(--ink); border: 2px solid var(--dark-line); border-radius: var(--r); color: #fff; font: 600 1.2rem/1.1 var(--f-display); letter-spacing: .03em; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.opt:hover:not(:disabled) { border-color: var(--maize); }
+.opt:disabled { cursor: default; opacity: .55; }
+.opt.right { border-color: #4fd08e; background: #12382b; opacity: 1; }
+.opt.wrong { border-color: #ff8a80; background: #46201d; opacity: 1; }
+.opt em { font: 500 .7rem/1 var(--f-mono); font-style: normal; letter-spacing: .1em; text-transform: uppercase; }
+.quiz-fb { color: var(--on-dark); min-height: 1.6em; }
+.quiz-end .big { margin-block: 6px; }
+.ranks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+.ranks li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--dark-line); color: var(--on-dark-muted); }
+.ranks li b { font: 700 1.2rem/1 var(--f-display); text-transform: uppercase; letter-spacing: .04em; color: #fff; }
+.ranks li span { font: 500 .82rem/1.3 var(--f-mono); }
+@media (max-width: 820px) { .quiz { grid-template-columns: 1fr; } }
+@media (max-width: 460px) { .quiz-opts { grid-template-columns: 1fr; } }
+
+/* stories */
+.sample-flag { font: 500 .68rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--rust); border: 1px dashed var(--rust); border-radius: 3px; padding: 5px 7px; align-self: flex-start; }
+.stories { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
+.story { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+.story h3 { font-size: 1.5rem; text-transform: uppercase; }
+.story .lane { font: 500 .8rem/1.4 var(--f-mono); color: var(--sea); }
+.story p { color: var(--muted); font-size: .98rem; }
+.story dl { margin: auto 0 0; padding-top: 12px; border-top: 1px dashed var(--line); display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: .9rem; }
+.story dt { font: 500 .72rem/1.6 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.story dd { margin: 0; }
+.quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: var(--gap); }
+.quote { margin: 0; padding: 22px 22px 22px 26px; border-left: 4px solid var(--maize); background: var(--paper); display: flex; flex-direction: column; gap: 12px; }
+.quote blockquote { margin: 0; font-size: 1.08rem; line-height: 1.5; }
+.quote figcaption { font: 500 .8rem/1.4 var(--f-mono); color: var(--muted); }
+@media (max-width: 900px) { .stories, .quotes { grid-template-columns: 1fr; } }
+
+/* contact */
+.contact { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(20px, 3vw, 34px); }
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--line); margin-bottom: 24px; }
+.tab { background: none; border: 0; padding: 12px 16px; min-height: 48px; font: 700 1.3rem/1 var(--f-display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--maize); }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.form-grid .full { grid-column: 1 / -1; }
+.form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 20px; }
+.form-foot p { font-size: .9rem; color: var(--muted); flex: 1 1 220px; }
+.err-sum { border: 1.5px solid var(--bad); background: #fdf1f0; color: var(--bad); border-radius: var(--r); padding: 12px 14px; margin-bottom: 16px; }
+.sent { border: 1.5px solid var(--ok); background: #eef8f2; border-radius: var(--r); padding: 18px; margin-top: 20px; display: grid; gap: 12px; }
+.sent h4 { font-size: 1.4rem; text-transform: uppercase; color: var(--ok); }
+.sent pre { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; font: 400 .84rem/1.5 var(--f-mono); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 220px; overflow: auto; }
+.sent-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.side { display: grid; gap: 16px; }
+.reach { background: var(--ink); color: var(--on-dark); border-radius: var(--r); padding: clamp(20px, 3vw, 30px); display: grid; gap: 18px; }
+.reach h3 { font-size: 1.7rem; text-transform: uppercase; }
+.reach-item { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--dark-line); }
+.reach-item small { font: 500 .7rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--maize); }
+.reach-item a { font-size: 1.06rem; font-weight: 500; text-decoration: none; overflow-wrap: anywhere; }
+.reach-item a:hover { text-decoration: underline; }
+.reach-item a.tel { font: 700 2rem/1.1 var(--f-display); letter-spacing: .04em; }
+.reach-item span { font-size: .9rem; color: var(--on-dark-muted); }
+@media (max-width: 900px) { .contact { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+/* footer */
+.foot { background: #081824; color: var(--on-dark-muted); padding-block: 40px; font-size: .93rem; }
+.foot .wrap { display: flex; flex-wrap: wrap; gap: 20px 40px; justify-content: space-between; align-items: flex-start; }
+.foot a { color: var(--on-dark); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.foot .logo-text b { color: #fff; }
+
+/* term dialog */
+dialog.term-dlg { border: 0; border-radius: var(--r); padding: 0; width: min(480px, calc(100vw - 32px)); background: var(--card); color: var(--text); box-shadow: 0 24px 60px rgba(4, 16, 26, .45); }
+dialog.term-dlg::backdrop { background: rgba(6, 20, 31, .62); }
+.dlg-body { padding: 24px; display: grid; gap: 10px; }
+.dlg-body .tag { font: 500 .7rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sea); }
+.dlg-body h3 { font-size: 2rem; }
+.dlg-body p { color: var(--muted); }
+.dlg-body .eg { color: var(--text); border-top: 1px dashed var(--line); padding-top: 10px; font-size: .95rem; }
+.dlg-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 14px 24px; background: var(--paper); border-top: 1px solid var(--line); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="corr" width="5" height="8" patternUnits="userSpaceOnUse"><rect width="1.4" height="8" fill="rgba(0,0,0,.16)"/></pattern>
+    <pattern id="slat" width="8" height="7" patternUnits="userSpaceOnUse"><rect width="8" height="1.4" fill="rgba(0,0,0,.2)"/></pattern>
+  </defs>
+</svg>
+
+<header class="site-head">
+  <div class="wrap">
+    <!-- LOGO SLOT: replace the <svg class="logo-mark"> below with <img src="assets/logo.png" alt="" class="logo-mark"> -->
+    <a class="logo" href="#top" aria-label="Africorn Inland Ocean, home">
+      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="5" fill="#f0b429"/><path d="M8 29 20 7l12 22h-6l-6-11-6 11z" fill="#0c2233"/><path d="M6 33h28" stroke="#0f5e6b" stroke-width="3"/></svg>
+      <span class="logo-text"><b>Africorn</b><span>Inland Ocean</span></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#journey">How it works</a>
+      <a href="#incoterms">Incoterms</a>
+      <a href="#logbook">Shipping terms</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#stories">Stories</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn--go btn--sm head-cta" href="#contact">Get a quote</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap">
+    <span class="plate">Freight forwarding · Johannesburg, South Africa</span>
+    <h1>Off the ship.<br>Through customs.<br><em>To your door.</em></h1>
+    <p class="hero-sub">Africorn Inland Ocean clears your cargo, stores it and trucks it anywhere in South Africa. And if the paperwork sounds like another language, we will teach you that too.</p>
+    <div class="hero-cta">
+      <a class="btn btn--go" href="#contact">Request a quick quote
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn--line" href="#journey">Follow a container</a>
+    </div>
+  </div>
+  <svg class="hero-scene" id="heroScene" viewBox="0 0 1680 440" preserveAspectRatio="xMidYMax meet" role="img" aria-label="A container ship at the quay, a gantry crane and container yard, and a truck driving to a warehouse"></svg>
+  <div class="ticker">
+    <div class="wrap"><ul>
+      <li>Customs clearing</li><li>Freight forwarding</li><li>Warehousing</li><li>Long haul</li><li>Short haul</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="band" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">What we do</span>
+      <h2>One team from quay to doorstep</h2>
+      <p class="lede">Most delays happen in the handover between the clearing agent, the warehouse and the transporter. We do all three, so your cargo has one file and one point of contact.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="svc">
+        <svg class="svc-art" data-art="customs" viewBox="0 0 520 190" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <div class="svc-body">
+          <h3>Customs clearing</h3>
+          <p>We prepare and submit your customs declaration to SARS, work out the duties and VAT up front, and stay on the file until the release comes through.</p>
+          <ul class="ticks">
+            <li>Import and export declarations</li>
+            <li>Tariff classification and duty estimates before you ship</li>
+            <li>Handling customs stops and inspections for you</li>
+          </ul>
+          <div class="chips"><span class="chips-label">Words you will hear</span>
+            <button class="term" data-term="hs">HS code</button><button class="term" data-term="sad500">SAD 500</button><button class="term" data-term="duty">Duty</button><button class="term" data-term="stop">Customs stop</button></div>
+        </div>
+      </article>
+      <article class="svc">
+        <svg class="svc-art" data-art="forwarding" viewBox="0 0 520 190" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <div class="svc-body">
+          <h3>Freight forwarding</h3>
+          <p>We plan the whole move: booking space with the carrier, lining up the documents and keeping you posted from port of loading to final delivery.</p>
+          <ul class="ticks">
+            <li>Full container (FCL) and shared container (LCL) shipments</li>
+            <li>Imports and exports through South African ports</li>
+            <li>Document checks so nothing holds up the cargo</li>
+          </ul>
+          <div class="chips"><span class="chips-label">Words you will hear</span>
+            <button class="term" data-term="fcl">FCL</button><button class="term" data-term="lcl">LCL</button><button class="term" data-term="bl">Bill of lading</button><button class="term" data-term="eta">ETA</button></div>
+        </div>
+      </article>
+      <article class="svc">
+        <svg class="svc-art" data-art="warehouse" viewBox="0 0 520 190" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <div class="svc-body">
+          <h3>Warehousing</h3>
+          <p>Somewhere safe for your cargo between the port and your customer. We unpack containers, check the goods against the packing list and store them until you call them off.</p>
+          <ul class="ticks">
+            <li>Container unpacking and loading</li>
+            <li>Short and long term storage</li>
+            <li>Picking, palletising and dispatch</li>
+          </ul>
+          <div class="chips"><span class="chips-label">Words you will hear</span>
+            <button class="term" data-term="unpack">Unpack</button><button class="term" data-term="pallet">Palletised</button><button class="term" data-term="crossdock">Cross-docking</button></div>
+        </div>
+      </article>
+      <article class="svc">
+        <svg class="svc-art" data-art="transport" viewBox="0 0 520 190" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <div class="svc-body">
+          <h3>Transportation</h3>
+          <p>Road freight for containers and loose cargo, whether it is across town or across the country.</p>
+          <div class="haul">
+            <div><b>Short haul</b><span>Port, depot and warehouse collections and local deliveries.</span></div>
+            <div><b>Long haul</b><span>Inter-city and cross-province loads on the main corridors.</span></div>
+          </div>
+          <div class="chips"><span class="chips-label">Words you will hear</span>
+            <button class="term" data-term="cartage">Cartage</button><button class="term" data-term="linehaul">Line haul</button><button class="term" data-term="pod">POD</button><button class="term" data-term="demurrage">Demurrage</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band band--dark" id="journey">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">How it works</span>
+      <h2>Follow a container home</h2>
+      <p class="lede">Seven stops between a supplier overseas and your receiving bay. Step through them to see what happens, who does it and which words turn up at each one.</p>
+    </div>
+    <ol class="route" id="route" role="tablist" aria-label="Stops on the journey"></ol>
+    <div class="leg" id="leg" role="tabpanel" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="band band--white" id="incoterms">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">Learn · Incoterms</span>
+      <h2>Who pays for what?</h2>
+      <p class="lede">Incoterms are three-letter rules on your supplier's quote that split the costs and the risk between seller and buyer. Pick one and watch the responsibility move.</p>
+    </div>
+    <div class="inco-tabs" id="incoTabs" role="group" aria-label="Choose an Incoterm"></div>
+    <div class="inco">
+      <div class="inco-about" id="incoAbout" aria-live="polite"></div>
+      <div>
+        <ul class="inco-rows" id="incoRows"></ul>
+        <div class="inco-key"><span class="who who--s">Seller</span><span class="who who--b">Buyer</span><span class="who who--o">Optional</span><span>Red line: where the risk passes to the buyer.</span></div>
+      </div>
+    </div>
+    <p class="note">A simplified guide to seven of the eleven Incoterms 2020 rules. The named place on your contract matters, so send us the quote and we will tell you exactly what it covers.</p>
+  </div>
+</section>
+
+<section class="band band--sea" id="calculator">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">Tool · Load calculator</span>
+      <h2>Will it fit in a container?</h2>
+      <p class="lede">Enter the size of one carton or pallet and how many you have. We will work out the volume and suggest how to ship it.</p>
+    </div>
+    <div class="calc">
+      <form class="calc-form" id="calcForm" novalidate>
+        <div class="calc-grid">
+          <div class="field"><label for="cL">Length (cm)</label><input id="cL" type="number" inputmode="decimal" min="1" value="120"></div>
+          <div class="field"><label for="cW">Width (cm)</label><input id="cW" type="number" inputmode="decimal" min="1" value="100"></div>
+          <div class="field"><label for="cH">Height (cm)</label><input id="cH" type="number" inputmode="decimal" min="1" value="150"></div>
+          <div class="field"><label for="cQ">Quantity</label><input id="cQ" type="number" inputmode="numeric" min="1" value="10"></div>
+          <div class="field span2"><label for="cKg">Weight each (kg)</label><input id="cKg" type="number" inputmode="decimal" min="0" value="450"></div>
+        </div>
+        <p class="note" style="color:#d8ecec">Example figures shown: ten standard pallets. Change them to match your cargo.</p>
+      </form>
+      <div class="calc-out" aria-live="polite">
+        <div class="big" id="calcCbm">18.00<small>CBM</small></div>
+        <div class="calc-stats" id="calcStats"></div>
+        <div class="fill" aria-hidden="true"><i id="calcFill"></i><span id="calcFillLabel"></span></div>
+        <p class="calc-advice" id="calcAdvice"></p>
+        <button class="btn btn--go" type="button" id="calcToQuote">Add this to my quote request</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="logbook">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">Learn · The logbook</span>
+      <h2>Shipping terms in plain English</h2>
+      <p class="lede">Every industry has its jargon and ours has more than most. Search for a word from your quote or invoice, or browse by topic.</p>
+    </div>
+    <div class="gl-tools">
+      <div class="field"><label for="glSearch">Search a term</label><input id="glSearch" type="search" placeholder="e.g. demurrage" autocomplete="off"></div>
+      <div class="gl-cats" id="glCats" role="group" aria-label="Filter by topic"></div>
+    </div>
+    <p class="gl-count" id="glCount" role="status"></p>
+    <div class="gl-grid" id="glGrid"></div>
+    <button class="btn btn--line gl-more" type="button" id="glMore" hidden></button>
+  </div>
+</section>
+
+<section class="band band--dark" id="quiz">
+  <div class="wrap">
+    <div class="quiz">
+      <div>
+        <span class="plate">Play · Dock talk</span>
+        <h2>Think you speak shipping?</h2>
+        <p class="lede">Eight quick questions drawn from the logbook. A new set every time you play.</p>
+        <ul class="ranks">
+          <li><b>Harbour Master</b><span>8 out of 8</span></li>
+          <li><b>Ship's Agent</b><span>6 or 7</span></li>
+          <li><b>Tally Clerk</b><span>4 or 5</span></li>
+          <li><b>Deckhand</b><span>3 or fewer</span></li>
+        </ul>
+      </div>
+      <div class="quiz-box" id="quizBox"></div>
+    </div>
+  </div>
+</section>
+
+<section class="band band--white" id="stories">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">Shipment stories</span>
+      <h2>What a job looks like</h2>
+      <p class="lede">Three typical moves, start to finish, so you can see where the time and the cost go.</p>
+    </div>
+    <div class="stories">
+      <article class="story">
+        <span class="sample-flag">Example shipment</span>
+        <h3>Machine parts for a Gauteng workshop</h3>
+        <span class="lane">Shanghai → Durban → Johannesburg</span>
+        <p>One 20ft container on FOB terms. Declaration submitted before the vessel berthed, so the box left the terminal inside its free days and went up the N3 on a long haul truck.</p>
+        <dl><dt>Services</dt><dd>Clearing, forwarding, long haul</dd><dt>Watch for</dt><dd>Storage if documents are late</dd></dl>
+      </article>
+      <article class="story">
+        <span class="sample-flag">Example shipment</span>
+        <h3>Retail stock shared in one container</h3>
+        <span class="lane">Mumbai → Durban → Durban depot</span>
+        <p>Twelve pallets shipped LCL. Unpacked at the depot, checked against the packing list, stored for three weeks and delivered to two stores in batches as shelves emptied.</p>
+        <dl><dt>Services</dt><dd>Clearing, warehousing, short haul</dd><dt>Watch for</dt><dd>Chargeable weight on LCL</dd></dl>
+      </article>
+      <article class="story">
+        <span class="sample-flag">Example shipment</span>
+        <h3>Export load to an overseas buyer</h3>
+        <span class="lane">Pretoria → Cape Town → Rotterdam</span>
+        <p>Goods collected from the factory, packed into a 40ft container, export declaration lodged and the box delivered to the terminal ahead of the stack closing date.</p>
+        <dl><dt>Services</dt><dd>Long haul, clearing, forwarding</dd><dt>Watch for</dt><dd>Missing the stack dates</dd></dl>
+      </article>
+    </div>
+    <div class="quotes">
+      <figure class="quote"><span class="sample-flag">Sample review</span>
+        <blockquote>"They told us the duty before the goods left the supplier. No surprises on the invoice."</blockquote>
+        <figcaption>Client name, company</figcaption></figure>
+      <figure class="quote"><span class="sample-flag">Sample review</span>
+        <blockquote>"One call and I know where my container is. I used to chase three different companies."</blockquote>
+        <figcaption>Client name, company</figcaption></figure>
+      <figure class="quote"><span class="sample-flag">Sample review</span>
+        <blockquote>"They explained every line of the quote. I finally understand what I am paying for."</blockquote>
+        <figcaption>Client name, company</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="plate">Get in touch</span>
+      <h2>Tell us what you are moving</h2>
+      <p class="lede">A few details are enough for a quick quotation. If you are not sure about a field, leave it blank and we will ask.</p>
+    </div>
+    <div class="contact">
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="Contact forms">
+          <button class="tab" role="tab" id="tabQuote" aria-selected="true" aria-controls="paneQuote">Quick quote</button>
+          <button class="tab" role="tab" id="tabEnq" aria-selected="false" aria-controls="paneEnq">General enquiry</button>
+        </div>
+
+        <div id="paneQuote" role="tabpanel" aria-labelledby="tabQuote">
+          <form id="quoteForm" novalidate>
+            <div class="err-sum" id="quoteErr" tabindex="-1" hidden></div>
+            <div class="form-grid">
+              <div class="field"><label for="qName">Your name <span class="req">*</span></label><input id="qName" name="name" autocomplete="name" required><span class="err" id="qNameErr"></span></div>
+              <div class="field"><label for="qCompany">Company</label><input id="qCompany" name="company" autocomplete="organization"></div>
+              <div class="field"><label for="qEmail">Email <span class="req">*</span></label><input id="qEmail" name="email" type="email" autocomplete="email" required><span class="err" id="qEmailErr"></span></div>
+              <div class="field"><label for="qPhone">Phone</label><input id="qPhone" name="phone" type="tel" autocomplete="tel"></div>
+              <div class="field"><label for="qService">Service <span class="req">*</span></label>
+                <select id="qService" name="service" required>
+                  <option value="">Choose one</option>
+                  <option>Customs clearing and forwarding</option>
+                  <option>Warehousing</option>
+                  <option>Transport: long haul</option>
+                  <option>Transport: short haul</option>
+                  <option>A combination / not sure</option>
+                </select><span class="err" id="qServiceErr"></span></div>
+              <div class="field"><label for="qDir">Type of move</label>
+                <select id="qDir" name="direction"><option>Import</option><option>Export</option><option>Local (within South Africa)</option></select></div>
+              <div class="field"><label for="qFrom">Collect from</label><input id="qFrom" name="from" placeholder="City, port or country"></div>
+              <div class="field"><label for="qTo">Deliver to</label><input id="qTo" name="to" placeholder="City, port or country"></div>
+              <div class="field full"><label for="qCargo">What is the cargo? <span class="req">*</span></label><textarea id="qCargo" name="cargo" required placeholder="What it is, how it is packed, size and weight if you know them"></textarea><span class="err" id="qCargoErr"></span></div>
+              <div class="field"><label for="qEquip">Container or load size</label>
+                <select id="qEquip" name="equipment"><option>Not sure</option><option>LCL / part load</option><option>20ft container</option><option>40ft container</option><option>40ft high cube</option><option>Refrigerated (reefer)</option><option>Loose / break bulk</option></select></div>
+              <div class="field"><label for="qDate">Cargo ready date</label><input id="qDate" name="date" type="date"></div>
+            </div>
+            <div class="form-foot">
+              <button class="btn btn--ink" type="submit">Send quote request</button>
+              <p>Goes to <strong>sales@africorn-ios.co.za</strong></p>
+            </div>
+          </form>
+          <div class="sent" id="quoteSent" hidden></div>
+        </div>
+
+        <div id="paneEnq" role="tabpanel" aria-labelledby="tabEnq" hidden>
+          <form id="enqForm" novalidate>
+            <div class="err-sum" id="enqErr" tabindex="-1" hidden></div>
+            <div class="form-grid">
+              <div class="field"><label for="eName">Your name <span class="req">*</span></label><input id="eName" name="name" autocomplete="name" required><span class="err" id="eNameErr"></span></div>
+              <div class="field"><label for="eEmail">Email <span class="req">*</span></label><input id="eEmail" name="email" type="email" autocomplete="email" required><span class="err" id="eEmailErr"></span></div>
+              <div class="field full"><label for="eSubject">Subject</label><input id="eSubject" name="subject"></div>
+              <div class="field full"><label for="eMsg">Message <span class="req">*</span></label><textarea id="eMsg" name="message" required></textarea><span class="err" id="eMsgErr"></span></div>
+            </div>
+            <div class="form-foot">
+              <button class="btn btn--ink" type="submit">Send enquiry</button>
+              <p>Goes to <strong>info@africorn-ios.co.za</strong></p>
+            </div>
+          </form>
+          <div class="sent" id="enqSent" hidden></div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="reach">
+          <h3>Prefer to talk?</h3>
+          <div class="reach-item"><small>Call</small><a class="tel" href="tel:+27636635159">063 663 5159</a></div>
+          <div class="reach-item"><small>Quotations</small><a href="mailto:sales@africorn-ios.co.za">sales@africorn-ios.co.za</a></div>
+          <div class="reach-item"><small>General enquiries</small><a href="mailto:info@africorn-ios.co.za">info@africorn-ios.co.za</a></div>
+          <div class="reach-item"><small>Director</small><a href="mailto:nninela@africorn-ios.co.za">nninela@africorn-ios.co.za</a></div>
+          <div class="reach-item"><small>Office hours</small><span style="color:var(--on-dark);font-size:1.06rem">08:00 to 17:00</span></div>
+          <div class="reach-item"><small>Based in</small><span style="color:var(--on-dark);font-size:1.06rem">Johannesburg, South Africa</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <span class="logo-text"><b>Africorn</b><span>Inland Ocean</span></span>
+      <p style="margin-top:12px;max-width:34ch">Customs clearing and forwarding, warehousing and road transport across South Africa.</p>
+    </div>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#journey">How it works</a></li>
+      <li><a href="#logbook">Shipping terms</a></li>
+      <li><a href="#contact">Request a quote</a></li>
+    </ul>
+    <ul>
+      <li><a href="tel:+27636635159">063 663 5159</a></li>
+      <li><a href="mailto:sales@africorn-ios.co.za">sales@africorn-ios.co.za</a></li>
+      <li><a href="mailto:info@africorn-ios.co.za">info@africorn-ios.co.za</a></li>
+      <li>Johannesburg, South Africa</li>
+      <li>Office hours: 08:00 to 17:00</li>
+    </ul>
+    <p style="width:100%;border-top:1px solid var(--dark-line);padding-top:16px">© <span id="year">2026</span> Africorn Inland Ocean. The shipping guides on this site are general information, not legal or customs advice.</p>
+  </div>
+</footer>
+
+<dialog class="term-dlg" id="termDlg" aria-labelledby="termDlgTitle">
+  <div class="dlg-body" id="termDlgBody"></div>
+  <div class="dlg-foot">
+    <a class="btn btn--line btn--sm" href="#logbook" id="termDlgMore">See all terms</a>
+    <button class="btn btn--ink btn--sm" id="termDlgClose" type="button">Close</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  var SALES = 'sales@africorn-ios.co.za';
+  var INFO = 'info@africorn-ios.co.za';
+
+  /* ------------------------------------------------------------------ illustrations */
+  var INK = '#0c2233', MAIZE = '#f0b429', RUST = '#b8432a', SEA = '#0f5e6b', LITE = '#1b8a8f', PALE = '#e6ecec';
+  var BOX = [RUST, MAIZE, LITE, '#2f5d8a', '#d9772b', PALE, '#3e7c4f'];
+
+  function box(x, y, w, h, c) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + c + '"/>' +
+      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="url(#corr)" stroke="rgba(0,0,0,.35)" stroke-width="1"/>';
+  }
+  function stack(x, base, heights, w, h, seed) {
+    var out = '';
+    heights.forEach(function (n, i) {
+      for (var r = 0; r < n; r++) out += box(x + i * (w + 2), base - (r + 1) * h, w, h, BOX[(i * 3 + r * 5 + (seed || 0)) % BOX.length]);
+    });
+    return out;
+  }
+  function ship() {
+    return '<path d="M4 100H560L524 164H34Q8 160 4 100Z" fill="#1d4257"/>' +
+      '<path d="M14 146H534L524 164H34Q20 161 14 146Z" fill="' + RUST + '"/>' +
+      '<rect x="30" y="34" width="72" height="66" fill="' + PALE + '"/>' +
+      '<rect x="36" y="44" width="60" height="7" fill="' + INK + '"/><rect x="36" y="60" width="60" height="5" fill="#7f97a0"/><rect x="36" y="74" width="60" height="5" fill="#7f97a0"/>' +
+      '<rect x="52" y="6" width="24" height="28" fill="' + MAIZE + '"/><rect x="52" y="14" width="24" height="6" fill="' + INK + '"/>' +
+      '<rect x="92" y="2" width="3" height="32" fill="' + PALE + '"/>' +
+      stack(114, 100, [3, 4, 4, 5, 5, 5, 4, 4, 3, 2], 40, 18, 1) +
+      '<text x="398" y="132" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="20" letter-spacing="3" fill="' + PALE + '">AFRICORN</text>';
+  }
+  function crane() {
+    var y = MAIZE;
+    return '<g fill="' + y + '">' +
+      '<rect x="0" y="-204" width="10" height="204"/><rect x="92" y="-204" width="10" height="204"/>' +
+      '<rect x="0" y="-128" width="102" height="8"/><rect x="-196" y="-212" width="340" height="11"/>' +
+      '<rect x="46" y="-268" width="8" height="60"/><rect x="22" y="-234" width="58" height="22" fill="' + PALE + '"/></g>' +
+      '<g stroke="' + y + '" stroke-width="4" fill="none"><path d="M50-266-170-212M50-266 136-212M5-128 97-204M97-128 5-204"/></g>' +
+      '<g class="a-trolley"><rect x="-150" y="-201" width="30" height="9" fill="' + INK + '" stroke="' + y + '" stroke-width="2"/>' +
+      '<path d="M-146-192V-150M-124-192V-150" stroke="' + PALE + '" stroke-width="1.5"/>' + box(-157, -150, 44, 18, RUST) + '</g>';
+  }
+  function truck(c) {
+    return '<rect x="0" y="-24" width="162" height="7" fill="#0a1822"/>' + box(4, -66, 152, 42, c || LITE) +
+      '<path d="M168-17V-62H204L226-40V-17Z" fill="' + PALE + '"/><path d="M192-57H202L217-42H192Z" fill="' + SEA + '"/>' +
+      '<rect x="160" y="-24" width="68" height="8" fill="#0a1822"/>' +
+      [22, 46, 150, 208].map(function (x) { return '<circle cx="' + x + '" cy="-10" r="11" fill="#081520"/><circle cx="' + x + '" cy="-10" r="4" fill="#8fa3ab"/>'; }).join('');
+  }
+  function warehouse() {
+    var doors = [22, 100, 178].map(function (x, i) {
+      return i === 1
+        ? '<rect x="' + x + '" y="-74" width="60" height="74" fill="#081520"/>' + box(x + 6, -22, 22, 20, '#c98f4a') + box(x + 31, -22, 22, 20, '#c98f4a') + box(x + 18, -43, 22, 20, MAIZE)
+        : '<rect x="' + x + '" y="-74" width="60" height="74" fill="#9fb2b8"/><rect x="' + x + '" y="-74" width="60" height="74" fill="url(#slat)"/>';
+    }).join('');
+    return '<rect x="0" y="-116" width="260" height="116" fill="' + PALE + '"/><rect x="0" y="-116" width="260" height="116" fill="url(#corr)" opacity=".35"/>' +
+      '<path d="M-8-116 130-154 268-116Z" fill="' + LITE + '"/><rect x="-8" y="-118" width="276" height="8" fill="' + SEA + '"/>' +
+      '<text x="130" y="-88" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="18" letter-spacing="4" fill="' + INK + '">AFRICORN</text>' + doors;
+  }
+  function waves(x1, x2, y) {
+    var o = '';
+    for (var r = 0; r < 3; r++) for (var x = x1 + r * 40; x < x2; x += 130) o += '<rect x="' + x + '" y="' + (y + 14 + r * 18) + '" width="' + (46 - r * 8) + '" height="3" fill="rgba(255,255,255,.22)"/>';
+    return o;
+  }
+
+  var hero = $('#heroScene');
+  if (hero) {
+    hero.innerHTML =
+      '<circle cx="330" cy="372" r="178" fill="' + MAIZE + '"/>' +
+      '<path d="M900 372C1020 300 1120 318 1230 288C1360 252 1500 300 1680 262V372Z" fill="#12384f"/>' +
+      '<g class="a-ship">' + ship() + '</g>' +
+      '<rect x="0" y="372" width="640" height="68" fill="' + SEA + '"/>' + waves(0, 620, 372) +
+      '<rect x="600" y="360" width="1080" height="80" fill="#24404f"/><rect x="600" y="360" width="1080" height="5" fill="#53717f"/>' +
+      '<path d="M600 404H1680" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="28 22" opacity=".7"/>' +
+      '<g transform="translate(650 360)">' + crane() + '</g>' +
+      stack(800, 360, [2, 4, 3, 4, 2], 58, 25, 2) +
+      '<g class="a-truck">' + truck(MAIZE) + '</g>' +
+      '<g transform="translate(1410 360)">' + warehouse() + '</g>';
+    var mq = window.matchMedia('(max-width: 700px)');
+    var crop = function () { hero.setAttribute('viewBox', mq.matches ? '250 60 860 380' : '0 0 1680 440'); };
+    crop();
+    if (mq.addEventListener) mq.addEventListener('change', crop);
+  }
+
+  var ART = {
+    customs: function () {
+      return '<rect width="520" height="190" fill="' + INK + '"/>' + stack(330, 176, [2, 3, 1], 56, 26, 3) +
+        '<g transform="rotate(-5 150 100)"><rect x="70" y="22" width="150" height="180" fill="#fff"/>' +
+        '<rect x="86" y="40" width="70" height="9" fill="' + INK + '"/>' +
+        [64, 78, 92, 106, 120, 134].map(function (y, i) { return '<rect x="86" y="' + y + '" width="' + (i % 2 ? 96 : 118) + '" height="4" fill="#b9c6ca"/>'; }).join('') + '</g>' +
+        '<g transform="rotate(-14 236 118)"><circle cx="236" cy="118" r="42" fill="none" stroke="' + RUST + '" stroke-width="5"/><circle cx="236" cy="118" r="33" fill="none" stroke="' + RUST + '" stroke-width="1.5"/>' +
+        '<text x="236" y="123" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="15" letter-spacing="1.5" fill="' + RUST + '">RELEASED</text></g>';
+    },
+    forwarding: function () {
+      return '<rect width="520" height="190" fill="' + INK + '"/><circle cx="130" cy="150" r="92" fill="' + MAIZE + '"/>' +
+        '<g transform="translate(70 50) scale(.66)">' + ship() + '</g><rect y="150" width="520" height="40" fill="' + SEA + '"/>' + waves(0, 520, 142);
+    },
+    warehouse: function () {
+      return '<rect width="520" height="190" fill="' + INK + '"/><rect y="168" width="520" height="22" fill="#24404f"/>' +
+        '<g transform="translate(60 168)">' + warehouse() + '</g>' + box(370, 142, 30, 26, '#c98f4a') + box(403, 142, 30, 26, MAIZE) + box(386, 115, 30, 26, '#c98f4a') +
+        box(450, 142, 30, 26, '#c98f4a') + '<rect x="364" y="166" width="124" height="4" fill="#8a6a3c"/>';
+    },
+    transport: function () {
+      return '<rect width="520" height="190" fill="' + INK + '"/><path d="M0 150C90 96 170 120 260 98C350 76 430 110 520 84V190H0Z" fill="#12384f"/>' +
+        '<rect y="152" width="520" height="38" fill="#24404f"/><path d="M0 172H520" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="26 20"/>' +
+        '<rect x="438" y="70" width="5" height="84" fill="#8fa3ab"/><rect x="412" y="52" width="58" height="36" rx="3" fill="#2a7d46" stroke="#fff" stroke-width="2"/>' +
+        '<text x="441" y="78" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="22" fill="#fff">N3</text>' +
+        '<g transform="translate(110 162)">' + truck(RUST) + '</g>';
+    }
+  };
+  $$('[data-art]').forEach(function (el) { var f = ART[el.getAttribute('data-art')]; if (f) el.innerHTML = f(); });
+
+  /* ------------------------------------------------------------------ glossary data */
+  var TERMS = [
+    { id: 'fcl', t: 'FCL', full: 'Full Container Load', c: 'Ocean', d: 'A container used by one shipper only. You pay for the whole box whether or not you fill it.', e: 'Usually worth it once your cargo passes about 15 cubic metres.' },
+    { id: 'lcl', t: 'LCL', full: 'Less than Container Load', c: 'Ocean', d: 'Your cargo shares a container with other shippers and you pay only for the space you use.', e: 'Good for a few pallets. It takes a little longer because the box is packed and unpacked at a depot.' },
+    { id: 'teu', t: 'TEU', full: 'Twenty-foot Equivalent Unit', c: 'Ocean', d: 'The standard way to count containers. A 20ft container is one TEU and a 40ft container is two.' },
+    { id: 'reefer', t: 'Reefer', c: 'Ocean', d: 'A refrigerated container that holds a set temperature for cargo such as fruit, meat or medicine.' },
+    { id: 'highcube', t: 'High cube', c: 'Ocean', d: 'A container about 30 cm taller than a standard one, giving extra room for light, bulky cargo.' },
+    { id: 'transship', t: 'Transshipment', c: 'Ocean', d: 'Moving a container from one vessel to another at a port along the way, when there is no direct sailing.' },
+    { id: 'ports', t: 'Port of loading / discharge', c: 'Ocean', d: 'The port where cargo goes onto the vessel, and the port where it comes off.', e: 'Durban, Cape Town and Ngqura are South Africa\'s main container ports.' },
+    { id: 'eta', t: 'ETA / ETD', full: 'Estimated Time of Arrival / Departure', c: 'Ocean', d: 'When a vessel or truck is expected to arrive or leave. Estimates move with weather and port congestion.' },
+    { id: 'stack', t: 'Stack dates', c: 'Ocean', d: 'The window in which a terminal accepts export containers for a particular vessel.', e: 'Miss the closing date and your container waits for the next sailing.' },
+    { id: 'breakbulk', t: 'Break bulk', c: 'Ocean', d: 'Cargo shipped loose instead of in a container, such as machinery, steel or timber.' },
+    { id: 'vgm', t: 'VGM', full: 'Verified Gross Mass', c: 'Ocean', d: 'The certified total weight of a packed container. A vessel will not load a container without it.' },
+
+    { id: 'bl', t: 'Bill of lading', full: 'B/L', c: 'Paperwork', d: 'Issued by the carrier. It is the receipt for the cargo, the contract to carry it and, in its original form, the title to the goods.' },
+    { id: 'telex', t: 'Telex release', c: 'Paperwork', d: 'The carrier releases the cargo at destination without the paper bill of lading, once the shipper has handed the originals back at origin.' },
+    { id: 'invoice', t: 'Commercial invoice', c: 'Paperwork', d: 'The seller\'s bill for the goods. Customs uses it to work out what the cargo is worth.' },
+    { id: 'packing', t: 'Packing list', c: 'Paperwork', d: 'Lists what is in each package, with weights and dimensions. It is how a warehouse checks nothing is missing.' },
+    { id: 'coo', t: 'Certificate of origin', c: 'Paperwork', d: 'States the country where the goods were made. Under some trade agreements it lowers the duty.' },
+    { id: 'incoterms', t: 'Incoterms', c: 'Paperwork', d: 'International rules, shown as three letters on a quote, that say which costs and risks belong to the seller and which to the buyer.' },
+    { id: 'consignee', t: 'Shipper / consignee', c: 'Paperwork', d: 'The shipper sends the cargo. The consignee is the party it is sent to.' },
+    { id: 'manifest', t: 'Manifest', c: 'Paperwork', d: 'The carrier\'s list of everything on board a vessel, which it submits to customs.' },
+
+    { id: 'sars', t: 'SARS Customs', c: 'Customs', d: 'The part of the South African Revenue Service that controls goods entering and leaving the country.' },
+    { id: 'hs', t: 'HS code', full: 'Tariff heading', c: 'Customs', d: 'An internationally agreed number that classifies your product. It decides the rate of duty.', e: 'Get it wrong and you may overpay, or face a penalty later.' },
+    { id: 'sad500', t: 'SAD 500', full: 'Customs declaration', c: 'Customs', d: 'The declaration form South African customs uses for imports and exports.' },
+    { id: 'duty', t: 'Customs duty', c: 'Customs', d: 'A tax on imported goods, set by the HS code and the customs value of the cargo.' },
+    { id: 'vat', t: 'Import VAT', c: 'Customs', d: 'VAT charged when goods enter the country. It is worked out on the customs value plus a 10% uplift plus any duty.' },
+    { id: 'stop', t: 'Customs stop', c: 'Customs', d: 'Customs holds a shipment to check the documents or examine the cargo before releasing it.' },
+    { id: 'importer', t: 'Importer\'s code', c: 'Customs', d: 'The registration number SARS gives a business so that it can import or export commercial goods.' },
+    { id: 'clearing', t: 'Clearing agent', c: 'Customs', d: 'A licensed company that declares goods to customs on your behalf.' },
+    { id: 'forwarder', t: 'Freight forwarder', c: 'Customs', d: 'The company that organises a shipment from start to finish, booking the carriers and managing the documents.' },
+    { id: 'bonded', t: 'Bonded warehouse', c: 'Customs', d: 'A warehouse licensed by customs where imported goods can be stored before duty is paid.' },
+    { id: 'permit', t: 'Import permit', c: 'Customs', d: 'Some goods need a permit or approval before they may be imported, for example from ITAC or the NRCS.' },
+
+    { id: 'demurrage', t: 'Demurrage', c: 'Costs', d: 'A daily charge from the shipping line when a full container stays in the terminal past its free days.' },
+    { id: 'detention', t: 'Detention', c: 'Costs', d: 'A daily charge from the shipping line when you keep its container outside the terminal past the free days.' },
+    { id: 'storage', t: 'Storage', c: 'Costs', d: 'A charge from the terminal or depot for cargo left there beyond the free period.' },
+    { id: 'freedays', t: 'Free days', c: 'Costs', d: 'The days you get at no charge before demurrage, detention or storage starts.' },
+    { id: 'thc', t: 'THC', full: 'Terminal Handling Charge', c: 'Costs', d: 'The terminal\'s fee for moving a container between the vessel and the yard.' },
+    { id: 'cbm', t: 'CBM', full: 'Cubic metre', c: 'Costs', d: 'The unit for cargo volume: length times width times height, in metres.' },
+    { id: 'wm', t: 'W/M', full: 'Weight or measure', c: 'Costs', d: 'How LCL sea freight is priced: per cubic metre or per 1 000 kg, whichever gives the bigger number.' },
+
+    { id: 'cartage', t: 'Cartage', c: 'Road', d: 'A short road move, such as from the port to a nearby depot or warehouse.' },
+    { id: 'linehaul', t: 'Line haul', full: 'Long haul', c: 'Road', d: 'A long-distance road move between cities, such as Durban to Johannesburg.' },
+    { id: 'pod', t: 'POD', full: 'Proof of Delivery', c: 'Road', d: 'The signed document confirming the goods were received, and in what condition.' },
+    { id: 'sideloader', t: 'Side-loader', c: 'Road', d: 'A trailer with its own cranes that lifts a container on or off the ground, so the site needs no forklift.' },
+    { id: 'superlink', t: 'Superlink', c: 'Road', d: 'A truck pulling two linked trailers. It is the workhorse of South African long haul.' },
+    { id: 'tautliner', t: 'Tautliner', c: 'Road', d: 'A trailer with curtain sides that slide open so it can be loaded from the side.' },
+    { id: 'backhaul', t: 'Backhaul', c: 'Road', d: 'The return leg of a truck\'s trip. Loads on this leg often cost less.' },
+    { id: 'turnin', t: 'Empty return', full: 'Turn-in', c: 'Road', d: 'Taking the empty container back to the shipping line\'s depot after it has been unpacked.' },
+
+    { id: 'unpack', t: 'Unpack', full: 'Destuff / devan', c: 'Warehouse', d: 'Taking the cargo out of a container. Packing it in is called stuffing.' },
+    { id: 'pallet', t: 'Palletised', c: 'Warehouse', d: 'Cargo stacked and wrapped on pallets so that a forklift can move it.', e: 'A standard South African pallet is 1.2 m by 1.0 m.' },
+    { id: 'crossdock', t: 'Cross-docking', c: 'Warehouse', d: 'Moving cargo straight from the arriving vehicle to the departing one, with little or no storage.' },
+    { id: 'pickpack', t: 'Pick and pack', c: 'Warehouse', d: 'Selecting items from stored stock and packing them to fill an order.' },
+    { id: 'depot', t: 'Container depot', c: 'Warehouse', d: 'A yard where containers are stored, packed and unpacked, and where empties are returned.' },
+    { id: 'tally', t: 'Tally', c: 'Warehouse', d: 'Counting and checking cargo against the documents as it is loaded or unloaded.' }
+  ];
+  var BYID = {};
+  TERMS.forEach(function (t) { BYID[t.id] = t; });
+
+  /* term dialog */
+  var dlg = $('#termDlg');
+  function openTerm(id) {
+    var t = BYID[id]; if (!t || !dlg) return;
+    $('#termDlgBody').innerHTML = '<span class="tag">' + esc(t.c) + '</span><h3 id="termDlgTitle">' + esc(t.t) + '</h3>' +
+      (t.full ? '<p style="font-family:var(--f-mono);font-size:.85rem">' + esc(t.full) + '</p>' : '') +
+      '<p>' + esc(t.d) + '</p>' + (t.e ? '<p class="eg">' + esc(t.e) + '</p>' : '');
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  function closeTerm() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-term]');
+    if (b) openTerm(b.getAttribute('data-term'));
+  });
+  if (dlg) {
+    $('#termDlgClose').addEventListener('click', closeTerm);
+    $('#termDlgMore').addEventListener('click', closeTerm);
+    dlg.addEventListener('click', function (ev) { if (ev.target === dlg) closeTerm(); });
+  }
+  function chips(ids) {
+    return ids.map(function (id) { return '<button class="term" type="button" data-term="' + id + '">' + esc(BYID[id].t) + '</button>'; }).join('');
+  }
+
+  /* ------------------------------------------------------------------ journey */
+  var STOPS = [
+    { n: 'Booking', h: 'Booking and paperwork', p: 'Your supplier confirms the goods are ready. Space is booked on a vessel and the shipping documents are drawn up. Errors made here cause most of the delays later, so this is where the checking pays off.', us: 'We book the cargo, check the invoice and packing list against each other, and confirm the tariff code before anything moves.', terms: ['forwarder', 'incoterms', 'invoice', 'packing'] },
+    { n: 'Sailing', h: 'On the water', p: 'The container is loaded at the port of loading and sails. Depending on the route it may change vessels along the way. Sailing times from Asia to South Africa are typically a few weeks.', us: 'We track the vessel and tell you if the arrival date moves, so that transport and warehouse space are ready on the day.', terms: ['fcl', 'lcl', 'bl', 'eta', 'transship'] },
+    { n: 'Arrival', h: 'Arrival at a South African port', p: 'The vessel berths and the container is lifted off into the terminal stack. From this moment the clock is running: you have a set number of free days before storage and demurrage are charged.', us: 'We aim to have the paperwork finished before the ship arrives, so the container can leave as soon as it lands.', terms: ['ports', 'thc', 'freedays', 'storage'] },
+    { n: 'Customs', h: 'Customs clearance', p: 'A declaration is submitted to SARS Customs with the tariff code and value of the goods. Duty and import VAT are paid. Customs either releases the cargo or stops it for a closer look.', us: 'This is our core work. We lodge the declaration, pay the duties on your behalf where arranged, and deal with any stop.', terms: ['sars', 'hs', 'sad500', 'duty', 'vat', 'stop'] },
+    { n: 'Haulage', h: 'Collection and haulage', p: 'Once released, a truck collects the container from the terminal. It may be a short run to a depot nearby, or a long haul inland along one of the main corridors.', us: 'We send the right vehicle for the load and the delivery site, and time it to stay inside the free days.', terms: ['cartage', 'linehaul', 'sideloader', 'demurrage', 'detention'] },
+    { n: 'Warehouse', h: 'Unpacking and storage', p: 'The container is opened and the cargo counted against the packing list. Goods can go straight out on another vehicle, or be stored and released in batches as you need them.', us: 'We unpack, tally and store your goods, and report any shortage or damage straight away.', terms: ['unpack', 'tally', 'pallet', 'crossdock'] },
+    { n: 'Delivery', h: 'Delivery to your door', p: 'The goods arrive at your premises and someone signs for them. The empty container goes back to the shipping line\'s depot, which closes the file.', us: 'We deliver, send you the signed proof of delivery and return the empty container on time.', terms: ['pod', 'turnin', 'consignee'] }
+  ];
+  var route = $('#route'), leg = $('#leg'), cur = 0;
+  function showStop(i, focus) {
+    cur = i;
+    $$('.stop', route).forEach(function (b, k) {
+      b.setAttribute('aria-selected', k === i ? 'true' : 'false');
+      b.tabIndex = k === i ? 0 : -1;
+      b.classList.toggle('done', k < i);
+      if (k === i && focus) b.focus();
+    });
+    var s = STOPS[i];
+    leg.innerHTML = '<div><span class="plate">Stop ' + (i + 1) + ' of ' + STOPS.length + '</span><h3>' + esc(s.h) + '</h3><p>' + esc(s.p) + '</p>' +
+      '<div class="leg-us"><b>Where Africorn comes in</b><p>' + esc(s.us) + '</p></div>' +
+      '<div class="leg-nav"><button class="btn btn--line btn--sm" type="button" id="legPrev"' + (i === 0 ? ' disabled style="opacity:.4;cursor:default"' : '') + '>Back</button>' +
+      (i < STOPS.length - 1 ? '<button class="btn btn--go btn--sm" type="button" id="legNext">Next stop</button>' : '<a class="btn btn--go btn--sm" href="#contact">Request a quote</a>') + '</div></div>' +
+      '<div class="leg-side"><div class="chips"><span class="chips-label">Words you will meet at this stop</span>' + chips(s.terms) + '</div></div>';
+    var p = $('#legPrev'), n = $('#legNext');
+    if (p && i > 0) p.addEventListener('click', function () { showStop(i - 1); });
+    if (n) n.addEventListener('click', function () { showStop(i + 1); });
+  }
+  if (route) {
+    route.innerHTML = STOPS.map(function (s, i) {
+      return '<li role="presentation"><button class="stop" type="button" role="tab" aria-controls="leg" data-i="' + i + '" aria-label="Stop ' + (i + 1) + ': ' + esc(s.h) + '"><i>' + (i + 1) + '</i><span>' + esc(s.n) + '</span></button></li>';
+    }).join('');
+    route.addEventListener('click', function (ev) { var b = ev.target.closest('.stop'); if (b) showStop(+b.getAttribute('data-i')); });
+    route.addEventListener('keydown', function (ev) {
+      if (ev.key === 'ArrowRight' && cur < STOPS.length - 1) { showStop(cur + 1, true); ev.preventDefault(); }
+      if (ev.key === 'ArrowLeft' && cur > 0) { showStop(cur - 1, true); ev.preventDefault(); }
+    });
+    showStop(0);
+  }
+
+  /* ------------------------------------------------------------------ incoterms */
+  var LEGS = ['Packing and loading at the supplier', 'Transport to the port of loading', 'Export customs clearance', 'Loading onto the vessel', 'Ocean freight', 'Cargo insurance', 'Unloading at the destination port', 'Import clearance, duty and VAT', 'Delivery to your door'];
+  var INCO = [
+    { k: 'EXW', n: 'Ex Works', who: 'BBBBBOBBB', risk: -1, d: 'The seller only has to make the goods available at their own premises. You arrange and pay for everything from there, including loading the truck.', r: 'Risk is yours from the moment the goods are ready for collection.' },
+    { k: 'FCA', n: 'Free Carrier', who: 'SSSBBOBBB', risk: 2, d: 'The seller clears the goods for export and hands them to the carrier you have chosen at an agreed place.', r: 'Risk passes to you when the goods are handed to your carrier.' },
+    { k: 'FOB', n: 'Free On Board', who: 'SSSSBOBBB', risk: 3, d: 'The seller pays to get the goods onto the vessel. You pay the ocean freight and everything after it. The most common term on quotes from Asia.', r: 'Risk passes to you once the goods are on board the vessel.' },
+    { k: 'CFR', n: 'Cost and Freight', who: 'SSSSSOBBB', risk: 3, d: 'The seller also pays the ocean freight to your port. Insurance is still for you to arrange.', r: 'Risk still passes at the port of loading, even though the seller paid the freight.' },
+    { k: 'CIF', n: 'Cost, Insurance and Freight', who: 'SSSSSSBBB', risk: 3, d: 'Like CFR, but the seller must also buy cargo insurance for the voyage. The cover is usually the minimum, so check what it includes.', r: 'Risk passes at the port of loading. The insurance is there for you to claim on.' },
+    { k: 'DAP', n: 'Delivered At Place', who: 'SSSSSOSBS', risk: 8, d: 'The seller delivers to a named place in your country. You only handle the import clearance and pay the duty and VAT.', r: 'Risk passes when the goods arrive at the named place, ready to unload.' },
+    { k: 'DDP', n: 'Delivered Duty Paid', who: 'SSSSSOSSS', risk: 8, d: 'The seller does everything, including import clearance and duties. Simple for you, but you have little control over the cost or the clearing.', r: 'Risk passes when the goods arrive at your door.' }
+  ];
+  var incoTabs = $('#incoTabs');
+  function showInco(i) {
+    var x = INCO[i];
+    $$('.inco-tab', incoTabs).forEach(function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+    $('#incoAbout').innerHTML = '<span class="plate">' + x.k + '</span><h3>' + esc(x.n) + '</h3><p>' + esc(x.d) + '</p><div class="inco-risk"><b>Where the risk passes</b>' + esc(x.r) + '</div>';
+    var L = { S: ['who--s', 'Seller'], B: ['who--b', 'Buyer'], O: ['who--o', 'Optional'] };
+    $('#incoRows').innerHTML = LEGS.map(function (l, k) {
+      var w = L[x.who.charAt(k)];
+      return '<li' + (k === x.risk ? ' class="risk-here"' : '') + '><span>' + l + '</span><span class="who ' + w[0] + '">' + w[1] + '</span></li>';
+    }).join('');
+  }
+  if (incoTabs) {
+    incoTabs.innerHTML = INCO.map(function (x, i) { return '<button class="inco-tab" type="button" data-i="' + i + '" aria-label="' + x.k + ', ' + x.n + '">' + x.k + '</button>'; }).join('');
+    incoTabs.addEventListener('click', function (ev) { var b = ev.target.closest('.inco-tab'); if (b) showInco(+b.getAttribute('data-i')); });
+    showInco(2);
+  }
+
+  /* ------------------------------------------------------------------ calculator */
+  var calc = null;
+  function fmt(n, d) { return n.toLocaleString('en-ZA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/,/g, '.').replace(/ /g, ' '); }
+  function runCalc() {
+    var v = function (id) { return parseFloat($('#' + id).value) || 0; };
+    var L = v('cL'), W = v('cW'), H = v('cH'), Q = Math.max(0, Math.floor(v('cQ'))), kg = v('cKg');
+    var cbm = L * W * H / 1e6 * Q, tot = kg * Q, rt = Math.max(cbm, tot / 1000);
+    var name, cap, advice;
+    if (cbm <= 0) { name = ''; cap = 1; advice = 'Enter the length, width, height and quantity to see a result.'; }
+    else if (cbm <= 15) { name = '20ft container'; cap = 28; advice = 'This would normally go LCL, sharing a container. LCL is priced per revenue tonne, and yours works out to about ' + fmt(rt, 2) + '.'; }
+    else if (cbm <= 28) { name = '20ft container'; cap = 28; advice = 'A 20ft container of your own (FCL) is the likely fit. It holds about 28 CBM once gaps between the cargo are allowed for.'; }
+    else if (cbm <= 58) { name = '40ft container'; cap = 58; advice = 'A 40ft container is the likely fit. It holds about 58 CBM in practice.'; }
+    else if (cbm <= 68) { name = '40ft high cube'; cap = 68; advice = 'A 40ft high cube is the likely fit, if your cargo can use the extra height.'; }
+    else { var n = Math.ceil(cbm / 58); name = n + ' x 40ft containers'; cap = n * 58; advice = 'This needs more than one container: about ' + n + ' x 40ft.'; }
+    if (cbm > 15 && tot / Math.max(1, Math.ceil(cbm / 58)) > 24000) advice += ' The load is heavy, so weight rather than volume may decide how it ships.';
+    $('#calcCbm').innerHTML = fmt(cbm, 2) + '<small>CBM</small>';
+    $('#calcStats').innerHTML = '<span>Total weight <b>' + fmt(tot, 0) + ' kg</b></span><span>Revenue tonnes <b>' + fmt(rt, 2) + '</b></span>';
+    var pct = Math.min(100, Math.round(cbm / cap * 100));
+    $('#calcFill').style.width = pct + '%';
+    $('#calcFillLabel').textContent = name ? 'About ' + pct + '% of ' + (cbm > 68 ? name : 'a ' + name) : '';
+    $('#calcAdvice').textContent = advice;
+    calc = { L: L, W: W, H: H, Q: Q, kg: kg, cbm: cbm, tot: tot, name: name, lcl: cbm > 0 && cbm <= 15 };
+  }
+  if ($('#calcForm')) {
+    $('#calcForm').addEventListener('input', runCalc);
+    $('#calcForm').addEventListener('submit', function (e) { e.preventDefault(); });
+    runCalc();
+    $('#calcToQuote').addEventListener('click', function () {
+      if (!calc || calc.cbm <= 0) return;
+      var line = calc.Q + ' x ' + calc.L + ' x ' + calc.W + ' x ' + calc.H + ' cm, ' + calc.kg + ' kg each. Total ' + fmt(calc.cbm, 2) + ' CBM, ' + fmt(calc.tot, 0) + ' kg.';
+      var ta = $('#qCargo');
+      ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + '\n' : '') + line;
+      var map = { '20ft container': '20ft container', '40ft container': '40ft container', '40ft high cube': '40ft high cube' };
+      $('#qEquip').value = calc.lcl ? 'LCL / part load' : (map[calc.name] || 'Not sure');
+      selectTab('Quote');
+      $('#contact').scrollIntoView();
+      ta.focus({ preventScroll: true });
+    });
+  }
+
+  /* ------------------------------------------------------------------ glossary */
+  var CATS = ['All', 'Ocean', 'Customs', 'Paperwork', 'Costs', 'Road', 'Warehouse'], glCat = 'All', glAll = false, GL_FIRST = 12;
+  function renderGl() {
+    var q = ($('#glSearch').value || '').trim().toLowerCase();
+    var list = TERMS.filter(function (t) {
+      return (glCat === 'All' || t.c === glCat) && (!q || (t.t + ' ' + (t.full || '') + ' ' + t.d).toLowerCase().indexOf(q) > -1);
+    });
+    var total = list.length, more = $('#glMore');
+    var cut = !glAll && !q && glCat === 'All' && total > GL_FIRST;
+    if (cut) list = list.slice(0, GL_FIRST);
+    more.hidden = !cut;
+    more.textContent = 'Show all ' + total + ' terms';
+    $('#glCount').textContent = (cut ? 'Showing ' + GL_FIRST + ' of ' : '') + total + (total === 1 ? ' term' : ' terms') + (q ? ' matching "' + q + '"' : '');
+    $('#glGrid').innerHTML = list.length ? list.map(function (t) {
+      return '<article class="gl-card"><span class="tag">' + t.c + '</span><h3>' + esc(t.t) + '</h3>' + (t.full ? '<span style="font:500 .8rem/1.2 var(--f-mono);color:var(--muted)">' + esc(t.full) + '</span>' : '') +
+        '<p>' + esc(t.d) + '</p>' + (t.e ? '<p class="eg">' + esc(t.e) + '</p>' : '') + '</article>';
+    }).join('') : '<p class="gl-empty">No term matches that yet. Try a shorter word, or <a href="#contact">ask us what it means</a>.</p>';
+  }
+  if ($('#glCats')) {
+    $('#glCats').innerHTML = CATS.map(function (c) { return '<button class="cat" type="button" aria-pressed="' + (c === 'All') + '" data-c="' + c + '">' + c + '</button>'; }).join('');
+    $('#glCats').addEventListener('click', function (ev) {
+      var b = ev.target.closest('.cat'); if (!b) return;
+      glCat = b.getAttribute('data-c');
+      $$('.cat').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      renderGl();
+    });
+    $('#glSearch').addEventListener('input', renderGl);
+    $('#glMore').addEventListener('click', function () { glAll = true; renderGl(); });
+    renderGl();
+  }
+
+  /* ------------------------------------------------------------------ quiz */
+  var quizBox = $('#quizBox'), QN = 8, quiz;
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function startQuiz() {
+    quiz = { qs: shuffle(TERMS).slice(0, QN), i: 0, score: 0 };
+    askQuiz();
+  }
+  function askQuiz() {
+    var t = quiz.qs[quiz.i];
+    var same = shuffle(TERMS.filter(function (x) { return x.id !== t.id && x.c === t.c; })).slice(0, 2);
+    var other = shuffle(TERMS.filter(function (x) { return x.id !== t.id && same.indexOf(x) < 0; })).slice(0, 1);
+    var opts = shuffle([t].concat(same, other));
+    quizBox.innerHTML = '<div class="quiz-meta"><span>Question ' + (quiz.i + 1) + ' of ' + QN + '</span><span>Score ' + quiz.score + '</span></div>' +
+      '<div class="quiz-bar"><i style="width:' + (quiz.i / QN * 100) + '%"></i></div>' +
+      '<p class="quiz-q"><small>Which term is this?</small>' + esc(t.d) + '</p>' +
+      '<div class="quiz-opts">' + opts.map(function (o) { return '<button class="opt" type="button" data-id="' + o.id + '"><span>' + esc(o.t) + '</span></button>'; }).join('') + '</div>' +
+      '<p class="quiz-fb" id="quizFb" role="status"></p>';
+    $$('.opt', quizBox).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ok = b.getAttribute('data-id') === t.id;
+        if (ok) quiz.score++;
+        $$('.opt', quizBox).forEach(function (x) {
+          x.disabled = true;
+          if (x.getAttribute('data-id') === t.id) { x.classList.add('right'); x.insertAdjacentHTML('beforeend', '<em>Correct</em>'); }
+          else if (x === b) { x.classList.add('wrong'); x.insertAdjacentHTML('beforeend', '<em>Your pick</em>'); }
+        });
+        var last = quiz.i === QN - 1;
+        $('#quizFb').innerHTML = (ok ? 'Correct. ' : 'Not quite. The answer is <strong>' + esc(t.t) + '</strong>. ') + (t.e ? esc(t.e) : '') +
+          '<br><button class="btn btn--go btn--sm" type="button" id="quizNext" style="margin-top:14px">' + (last ? 'See my rank' : 'Next question') + '</button>';
+        $('#quizNext').addEventListener('click', function () { quiz.i++; if (last) endQuiz(); else askQuiz(); });
+        $('#quizNext').focus();
+      });
+    });
+  }
+  function endQuiz() {
+    var s = quiz.score, rank = s === QN ? 'Harbour Master' : s >= 6 ? 'Ship\'s Agent' : s >= 4 ? 'Tally Clerk' : 'Deckhand';
+    var line = s === QN ? 'A clean sheet. You could run the port.' : s >= 6 ? 'You know your way around a bill of lading.' : s >= 4 ? 'A solid count. A few more terms and you are there.' : 'Everyone starts on deck. The logbook above will get you promoted.';
+    quizBox.innerHTML = '<div class="quiz-end"><span class="plate">Your rank</span><h3 style="font-size:2.6rem;text-transform:uppercase;color:#fff">' + rank + '</h3>' +
+      '<div class="big">' + s + '<small>out of ' + QN + '</small></div><p class="quiz-fb">' + line + '</p></div>' +
+      '<div class="leg-nav" style="margin-top:auto"><button class="btn btn--go" type="button" id="quizAgain">Play again</button><a class="btn btn--line" href="#logbook">Study the logbook</a></div>';
+    $('#quizAgain').addEventListener('click', startQuiz);
+  }
+  if (quizBox) startQuiz();
+
+  /* ------------------------------------------------------------------ nav, tabs */
+  var navToggle = $('#navToggle'), nav = $('#nav');
+  if (navToggle) {
+    navToggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.addEventListener('click', function (ev) { if (ev.target.tagName === 'A') { nav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); } });
+  }
+  function selectTab(which) {
+    ['Quote', 'Enq'].forEach(function (k) {
+      var on = k === which;
+      $('#tab' + k).setAttribute('aria-selected', on ? 'true' : 'false');
+      $('#pane' + k).hidden = !on;
+    });
+  }
+  if ($('#tabQuote')) {
+    $('#tabQuote').addEventListener('click', function () { selectTab('Quote'); });
+    $('#tabEnq').addEventListener('click', function () { selectTab('Enq'); });
+  }
+  if ($('#year')) $('#year').textContent = new Date().getFullYear();
+
+  /* ------------------------------------------------------------------ forms
+     The site is static, so a form opens the visitor's email app with the message
+     filled in. The on-page panel gives a copy-and-send fallback if no app opens. */
+  var MSG = { name: 'Enter your name.', email: 'Enter an email address we can reply to, like name@company.co.za.', service: 'Choose the service you need.', cargo: 'Tell us briefly what the cargo is.', message: 'Write your message.' };
+  function validate(form, errBox) {
+    var bad = [];
+    $$('[required]', form).forEach(function (el) {
+      var val = el.value.trim(), ok = !!val;
+      if (ok && el.type === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+      var wrap = el.closest('.field'), err = $('.err', wrap);
+      wrap.classList.toggle('invalid', !ok);
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      if (err) { err.textContent = ok ? '' : MSG[el.name]; el.setAttribute('aria-describedby', err.id); }
+      if (!ok) bad.push(el);
+    });
+    if (bad.length) {
+      errBox.hidden = false;
+      errBox.innerHTML = '<strong>Please fix ' + (bad.length === 1 ? 'this field' : 'these ' + bad.length + ' fields') + ':</strong> ' +
+        bad.map(function (el) { return '<a href="#' + el.id + '">' + esc($('label', el.closest('.field')).textContent.replace('*', '').trim()) + '</a>'; }).join(', ');
+      if (bad.length > 1) errBox.focus(); else bad[0].focus();
+    } else { errBox.hidden = true; }
+    return !bad.length;
+  }
+  function deliver(to, subject, body, box, kind) {
+    var href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    box.hidden = false;
+    box.innerHTML = '<h4>Almost done: press send in your email app</h4>' +
+      '<p>Your ' + kind + ' is ready as an email to <strong>' + to + '</strong>. If your email app did not open, copy the message below and send it to that address.</p>' +
+      '<pre id="' + box.id + 'Text">' + esc('To: ' + to + '\nSubject: ' + subject + '\n\n' + body) + '</pre>' +
+      '<div class="sent-row"><button class="btn btn--ink btn--sm" type="button" data-copy="' + box.id + 'Text">Copy message</button>' +
+      '<a class="btn btn--line btn--sm" href="' + href + '">Open email app again</a><span role="status" class="copied"></span></div>';
+    box.scrollIntoView({ block: 'nearest' });
+    try { window.location.href = href; } catch (e) { /* the panel above is the fallback */ }
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-copy]'); if (!b) return;
+    var pre = document.getElementById(b.getAttribute('data-copy')), note = $('.copied', b.parentNode);
+    var sel = function () { var r = document.createRange(); r.selectNodeContents(pre); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); note.textContent = 'Selected. Press Ctrl+C or Cmd+C to copy.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pre.textContent).then(function () { note.textContent = 'Copied.'; }, sel); else sel();
+  });
+  function val(id) { var el = $('#' + id); return el ? el.value.trim() : ''; }
+
+  var qf = $('#quoteForm');
+  if (qf) qf.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (!validate(qf, $('#quoteErr'))) return;
+    var who = val('qCompany') || val('qName');
+    var body = ['QUOTE REQUEST (from africorn-ios.co.za)', '',
+      'Name: ' + val('qName'), 'Company: ' + (val('qCompany') || '-'), 'Email: ' + val('qEmail'), 'Phone: ' + (val('qPhone') || '-'), '',
+      'Service: ' + val('qService'), 'Type of move: ' + val('qDir'), 'Collect from: ' + (val('qFrom') || '-'), 'Deliver to: ' + (val('qTo') || '-'),
+      'Container / load size: ' + val('qEquip'), 'Cargo ready date: ' + (val('qDate') || '-'), '', 'Cargo:', val('qCargo')].join('\n');
+    deliver(SALES, 'Quote request: ' + val('qService') + ' (' + who + ')', body, $('#quoteSent'), 'quote request');
+  });
+  var ef = $('#enqForm');
+  if (ef) ef.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (!validate(ef, $('#enqErr'))) return;
+    var body = ['GENERAL ENQUIRY (from africorn-ios.co.za)', '', 'Name: ' + val('eName'), 'Email: ' + val('eEmail'), '', val('eMsg')].join('\n');
+    deliver(INFO, val('eSubject') || 'Website enquiry from ' + val('eName'), body, $('#enqSent'), 'enquiry');
+  });
+})();
+
+</script>
