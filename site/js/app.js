@@ -7,110 +7,6 @@
   var SALES = 'sales@africorn-ios.co.za';
   var INFO = 'info@africorn-ios.co.za';
 
-  /* ------------------------------------------------------------------ illustrations */
-  var INK = '#0b1038', MAIZE = '#f5b841', RUST = '#d53132', SEA = '#1012d9', LITE = '#367c4a', PALE = '#eceef6';
-  var BOX = [RUST, MAIZE, LITE, '#1012d9', '#e8862e', PALE, '#5a6ff0'];
-
-  function box(x, y, w, h, c) {
-    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + c + '"/>' +
-      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="url(#corr)" stroke="rgba(0,0,0,.35)" stroke-width="1"/>';
-  }
-  function stack(x, base, heights, w, h, seed) {
-    var out = '';
-    heights.forEach(function (n, i) {
-      for (var r = 0; r < n; r++) out += box(x + i * (w + 2), base - (r + 1) * h, w, h, BOX[(i * 3 + r * 5 + (seed || 0)) % BOX.length]);
-    });
-    return out;
-  }
-  function ship() {
-    return '<path d="M4 100H560L524 164H34Q8 160 4 100Z" fill="#1b2580"/>' +
-      '<path d="M14 146H534L524 164H34Q20 161 14 146Z" fill="' + RUST + '"/>' +
-      '<rect x="30" y="34" width="72" height="66" fill="' + PALE + '"/>' +
-      '<rect x="36" y="44" width="60" height="7" fill="' + INK + '"/><rect x="36" y="60" width="60" height="5" fill="#8a90b8"/><rect x="36" y="74" width="60" height="5" fill="#8a90b8"/>' +
-      '<rect x="52" y="6" width="24" height="28" fill="' + MAIZE + '"/><rect x="52" y="14" width="24" height="6" fill="' + INK + '"/>' +
-      '<rect x="92" y="2" width="3" height="32" fill="' + PALE + '"/>' +
-      stack(114, 100, [3, 4, 4, 5, 5, 5, 4, 4, 3, 2], 40, 18, 1) +
-      '<text x="398" y="132" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="20" letter-spacing="3" fill="' + PALE + '">AFRICORN</text>';
-  }
-  function crane() {
-    var y = MAIZE;
-    return '<g fill="' + y + '">' +
-      '<rect x="0" y="-204" width="10" height="204"/><rect x="92" y="-204" width="10" height="204"/>' +
-      '<rect x="0" y="-128" width="102" height="8"/><rect x="-196" y="-212" width="340" height="11"/>' +
-      '<rect x="46" y="-268" width="8" height="60"/><rect x="22" y="-234" width="58" height="22" fill="' + PALE + '"/></g>' +
-      '<g stroke="' + y + '" stroke-width="4" fill="none"><path d="M50-266-170-212M50-266 136-212M5-128 97-204M97-128 5-204"/></g>' +
-      '<g class="trolley-follow"><g class="a-trolley"><rect x="-150" y="-201" width="30" height="9" fill="' + INK + '" stroke="' + y + '" stroke-width="2"/>' +
-      '<path d="M-146-192V-150M-124-192V-150" stroke="' + PALE + '" stroke-width="1.5"/>' + box(-157, -150, 44, 18, RUST) + '</g></g>';
-  }
-  function truck(c) {
-    return '<rect x="0" y="-24" width="162" height="7" fill="#060822"/>' + box(4, -66, 152, 42, c || LITE) +
-      '<path d="M168-17V-62H204L226-40V-17Z" fill="' + PALE + '"/><path d="M192-57H202L217-42H192Z" fill="' + SEA + '"/>' +
-      '<rect x="160" y="-24" width="68" height="8" fill="#060822"/>' +
-      [22, 46, 150, 208].map(function (x) { return '<circle cx="' + x + '" cy="-10" r="11" fill="#060822"/><circle cx="' + x + '" cy="-10" r="4" fill="#9aa0c4"/>'; }).join('');
-  }
-  function warehouse() {
-    var doors = [22, 100, 178].map(function (x, i) {
-      return i === 1
-        ? '<rect x="' + x + '" y="-74" width="60" height="74" fill="#060822"/>' + box(x + 6, -22, 22, 20, '#c98f4a') + box(x + 31, -22, 22, 20, '#c98f4a') + box(x + 18, -43, 22, 20, MAIZE)
-        : '<rect x="' + x + '" y="-74" width="60" height="74" fill="#a9aecb"/><rect x="' + x + '" y="-74" width="60" height="74" fill="url(#slat)"/>';
-    }).join('');
-    return '<rect x="0" y="-116" width="260" height="116" fill="' + PALE + '"/><rect x="0" y="-116" width="260" height="116" fill="url(#corr)" opacity=".35"/>' +
-      '<path d="M-8-116 130-154 268-116Z" fill="' + LITE + '"/><rect x="-8" y="-118" width="276" height="8" fill="' + SEA + '"/>' +
-      '<text x="130" y="-88" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="18" letter-spacing="4" fill="' + INK + '">AFRICORN</text>' + doors;
-  }
-  function waves(x1, x2, y) {
-    var o = '';
-    for (var r = 0; r < 3; r++) for (var x = x1 + r * 40; x < x2; x += 130) o += '<rect x="' + x + '" y="' + (y + 14 + r * 18) + '" width="' + (46 - r * 8) + '" height="3" fill="rgba(255,255,255,.22)"/>';
-    return o;
-  }
-
-  var hero = $('#heroScene');
-  if (hero) {
-    hero.innerHTML =
-      '<g data-depth="-14"><circle cx="330" cy="372" r="178" fill="' + MAIZE + '"/></g>' +
-      '<g data-depth="-8"><path d="M860 372C1020 300 1120 318 1230 288C1360 252 1500 300 1720 262V372Z" fill="#141b55"/></g>' +
-      '<g data-depth="10"><g class="a-ship">' + ship() + '</g></g>' +
-      '<rect x="0" y="372" width="640" height="68" fill="' + SEA + '"/>' + waves(0, 620, 372) +
-      '<rect x="600" y="360" width="1080" height="80" fill="#232a5c"/><rect x="600" y="360" width="1080" height="5" fill="#565e96"/>' +
-      '<path d="M600 404H1680" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="28 22" opacity=".7"/>' +
-      '<g transform="translate(650 360)">' + crane() + '</g>' +
-      stack(800, 360, [2, 4, 3, 4, 2], 58, 25, 2) +
-      '<g class="a-truck">' + truck(MAIZE) + '</g>' +
-      '<g transform="translate(1410 360)">' + warehouse() + '</g>';
-    var mq = window.matchMedia('(max-width: 700px)');
-    var crop = function () { hero.setAttribute('viewBox', mq.matches ? '250 60 860 380' : '0 0 1680 440'); };
-    crop();
-    if (mq.addEventListener) mq.addEventListener('change', crop);
-  }
-
-  var ART = {
-    customs: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/>' + stack(330, 176, [2, 3, 1], 56, 26, 3) +
-        '<g transform="rotate(-5 150 100)"><rect x="70" y="22" width="150" height="180" fill="#fff"/>' +
-        '<rect x="86" y="40" width="70" height="9" fill="' + INK + '"/>' +
-        [64, 78, 92, 106, 120, 134].map(function (y, i) { return '<rect x="86" y="' + y + '" width="' + (i % 2 ? 96 : 118) + '" height="4" fill="#c3c7da"/>'; }).join('') + '</g>' +
-        '<g transform="rotate(-14 236 118)"><circle cx="236" cy="118" r="42" fill="none" stroke="' + RUST + '" stroke-width="5"/><circle cx="236" cy="118" r="33" fill="none" stroke="' + RUST + '" stroke-width="1.5"/>' +
-        '<text x="236" y="123" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="15" letter-spacing="1.5" fill="' + RUST + '">RELEASED</text></g>';
-    },
-    forwarding: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/><circle cx="130" cy="150" r="92" fill="' + MAIZE + '"/>' +
-        '<g transform="translate(70 50) scale(.66)">' + ship() + '</g><rect y="150" width="520" height="40" fill="' + SEA + '"/>' + waves(0, 520, 142);
-    },
-    warehouse: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/><rect y="168" width="520" height="22" fill="#232a5c"/>' +
-        '<g transform="translate(60 168)">' + warehouse() + '</g>' + box(370, 142, 30, 26, '#c98f4a') + box(403, 142, 30, 26, MAIZE) + box(386, 115, 30, 26, '#c98f4a') +
-        box(450, 142, 30, 26, '#c98f4a') + '<rect x="364" y="166" width="124" height="4" fill="#8a6a3c"/>';
-    },
-    transport: function () {
-      return '<rect width="520" height="190" fill="' + INK + '"/><path d="M0 150C90 96 170 120 260 98C350 76 430 110 520 84V190H0Z" fill="#141b55"/>' +
-        '<rect y="152" width="520" height="38" fill="#232a5c"/><path d="M0 172H520" stroke="' + MAIZE + '" stroke-width="3" stroke-dasharray="26 20"/>' +
-        '<rect x="438" y="70" width="5" height="84" fill="#9aa0c4"/><rect x="412" y="52" width="58" height="36" rx="3" fill="#367c4a" stroke="#fff" stroke-width="2"/>' +
-        '<text x="441" y="78" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="22" fill="#fff">N3</text>' +
-        '<g transform="translate(110 162)">' + truck(RUST) + '</g>';
-    }
-  };
-  $$('[data-art]').forEach(function (el) { var f = ART[el.getAttribute('data-art')]; if (f) el.innerHTML = f(); });
-
   /* ------------------------------------------------------------------ glossary data */
   var TERMS = [
     { id: 'fcl', t: 'FCL', full: 'Full Container Load', c: 'Ocean', d: 'A container used by one shipper only. You pay for the whole box whether or not you fill it.', e: 'Usually worth it once your cargo passes about 15 cubic metres.' },
@@ -197,6 +93,7 @@
   }
 
   /* ------------------------------------------------------------------ journey */
+  var LEG_PHOTOS = [['svc-customs', 'Shipping documents being checked on a clipboard'], ['svc-forwarding', 'A container ship under way at sea'], ['hero-port', 'A ship alongside the quay under gantry cranes'], ['leg-port', 'A container terminal with cranes and stacked containers'], ['hero-road', 'Freight trucks on a highway'], ['people-warehouse', 'A warehouse worker checking stock against a list'], ['leg-forklift', 'Forklifts loading pallets onto a truck']];
   var STOPS = [
     { n: 'Booking', h: 'Booking and paperwork', p: 'Your supplier confirms the goods are ready. Space is booked on a vessel and the shipping documents are drawn up. Errors made here cause most of the delays later, so this is where the checking pays off.', us: 'We book the cargo, check the invoice and packing list against each other, and confirm the tariff code before anything moves.', terms: ['forwarder', 'incoterms', 'invoice', 'packing'] },
     { n: 'Sailing', h: 'On the water', p: 'The container is loaded at the port of loading and sails. Depending on the route it may change vessels along the way. Sailing times from Asia to South Africa are typically a few weeks.', us: 'We track the vessel and tell you if the arrival date moves, so that transport and warehouse space are ready on the day.', terms: ['fcl', 'lcl', 'bl', 'eta', 'transship'] },
@@ -220,7 +117,7 @@
       '<div class="leg-us"><b>Where Africorn comes in</b><p>' + esc(s.us) + '</p></div>' +
       '<div class="leg-nav"><button class="btn btn--line btn--sm" type="button" id="legPrev"' + (i === 0 ? ' disabled style="opacity:.4;cursor:default"' : '') + '>Back</button>' +
       (i < STOPS.length - 1 ? '<button class="btn btn--go btn--sm" type="button" id="legNext">Next stop</button>' : '<a class="btn btn--go btn--sm" href="#contact">Request a quote</a>') + '</div></div>' +
-      '<div class="leg-side"><div class="chips"><span class="chips-label">Words you will meet at this stop</span>' + chips(s.terms) + '</div></div>';
+      '<div class="leg-side"><div class="leg-photo"><img src="assets/img/' + LEG_PHOTOS[i][0] + '-sm.webp" alt="' + LEG_PHOTOS[i][1] + '" width="800" height="533"></div><div class="chips"><span class="chips-label">Words you will meet at this stop</span>' + chips(s.terms) + '</div></div>';
     var p = $('#legPrev'), n = $('#legNext');
     if (p && i > 0) p.addEventListener('click', function () { showStop(i - 1); });
     if (n) n.addEventListener('click', function () { showStop(i + 1); });
@@ -380,16 +277,92 @@
   }
   if (quizBox) startQuiz();
 
-  /* ------------------------------------------------------------------ cursor effects
-     Only for a mouse or trackpad, and only when the visitor has not asked for reduced motion. */
-  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  /* ------------------------------------------------------------------ motion
+     Everything below is decoration. It is skipped when the visitor asks for reduced motion. */
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var raf = function (fn) { var busy = false, last; return function (ev) { last = ev; if (busy) return; busy = true; requestAnimationFrame(function () { busy = false; fn(last); }); }; };
+
+  /* hero slideshow */
+  var heroBox = $('.hero'), slides = $$('.hero-slide'), tabs = $$('.hero-tab'), pauseBtn = $('#heroPause');
+  var slideAt = 0, slideTimer = null, userPaused = calm;
+  function showSlide(i) {
+    slideAt = (i + slides.length) % slides.length;
+    slides.forEach(function (el, k) { el.classList.toggle('on', k === slideAt); });
+    tabs.forEach(function (el, k) { el.classList.toggle('on', k === slideAt); el.setAttribute('aria-pressed', k === slideAt ? 'true' : 'false'); });
+  }
+  function runSlides() {
+    clearTimeout(slideTimer);
+    heroBox.classList.toggle('paused', userPaused);
+    if (!userPaused) slideTimer = setTimeout(function () { showSlide(slideAt + 1); runSlides(); }, 6000);
+  }
+  if (heroBox && slides.length) {
+    tabs.forEach(function (b) { b.addEventListener('click', function () { showSlide(+b.getAttribute('data-i')); runSlides(); }); });
+    if (pauseBtn) pauseBtn.addEventListener('click', function () {
+      userPaused = !userPaused;
+      pauseBtn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
+      pauseBtn.setAttribute('aria-label', userPaused ? 'Play the photo slideshow' : 'Pause the photo slideshow');
+      runSlides();
+    });
+    if (pauseBtn && calm) pauseBtn.setAttribute('aria-pressed', 'true');
+    document.addEventListener('visibilitychange', function () { if (document.hidden) clearTimeout(slideTimer); else runSlides(); });
+    showSlide(0); runSlides();
+  }
+
+  /* headline words rise in one after another */
+  var title = $('#heroTitle');
+  if (title && !calm) {
+    var n = 0;
+    (function split(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var sp = document.createElement('span'); sp.className = 'w'; sp.style.setProperty('--i', n++); sp.textContent = part; frag.appendChild(sp);
+          });
+          node.replaceChild(frag, c);
+        } else if (c.nodeType === 1 && c.tagName !== 'BR') split(c);
+      });
+    })(title);
+  }
+
+  /* header turns to glass once the page scrolls; progress bar; photo bands drift */
+  var head = $('#siteHead'), bar = $('#progress'), drift = $$('.band-bg');
+  var onScroll = raf(function () {
+    var y = window.scrollY || 0, max = document.documentElement.scrollHeight - window.innerHeight;
+    if (head) head.classList.toggle('scrolled', y > 24);
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0).toFixed(4) + ')';
+    if (!calm) drift.forEach(function (el) {
+      var r = el.parentNode.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      var t = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+      el.style.transform = 'translateY(' + (t * -9).toFixed(2) + '%)';
+    });
+  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* sections ease in as they scroll into view */
+  if (!calm && 'IntersectionObserver' in window) {
+    var groups = ['.sec-head', '.svc', '.statement .plate, .statement h2, .statement .lede, .pillar', '.route, .leg', '.inco-tabs, .inco', '.calc > *', '.gl-tools', '.quiz > *', '.story', '.quote', '.panel, .side'];
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    document.documentElement.classList.add('rv');
+    groups.forEach(function (sel) {
+      $$(sel).forEach(function (el, k) { el.setAttribute('data-reveal', ''); el.style.setProperty('--d', (k % 4) * 90 + 'ms'); io.observe(el); });
+    });
+  }
+
+  /* cursor effects, for a mouse or trackpad only */
   if (canHover && !calm) {
     document.documentElement.classList.add('has-cursor');
-    var raf = function (fn) { var busy = false, last; return function (ev) { last = ev; if (busy) return; busy = true; requestAnimationFrame(function () { busy = false; fn(last); }); }; };
 
     /* a soft light that follows the cursor across the dark bands */
-    $$('.hero, .band--dark, .band--sea').forEach(function (el) {
+    $$('.band--dark, .band--sea, .statement').forEach(function (el) {
       el.classList.add('glow');
       el.addEventListener('pointermove', raf(function (ev) {
         var r = el.getBoundingClientRect();
@@ -398,25 +371,15 @@
       }));
     });
 
-    /* hero: the scene shifts in layers, and the crane trolley tracks the cursor */
-    var heroBox = $('.hero');
-    if (heroBox && hero) {
-      var layers = $$('[data-depth]', hero), follow = $('.trolley-follow', hero);
+    /* the hero photo shifts against the cursor */
+    var media = $('#heroMedia');
+    if (heroBox && media) {
       heroBox.addEventListener('pointermove', raf(function (ev) {
         var r = heroBox.getBoundingClientRect();
         var px = (ev.clientX - r.left) / r.width - 0.5, py = (ev.clientY - r.top) / r.height - 0.5;
-        layers.forEach(function (g) { var d = +g.getAttribute('data-depth'); g.style.transform = 'translate(' + (px * d * 2).toFixed(1) + 'px,' + (py * d * 0.6).toFixed(1) + 'px)'; });
-        var m = hero.getScreenCTM();
-        if (m && follow) {
-          var x = (ev.clientX - m.e) / m.a - 650 + 135;
-          follow.classList.add('on');
-          follow.style.transform = 'translateX(' + Math.max(0, Math.min(262, x)).toFixed(1) + 'px)';
-        }
+        media.style.transform = 'translate(' + (px * -1.6).toFixed(2) + '%,' + (py * -1.6).toFixed(2) + '%)';
       }));
-      heroBox.addEventListener('pointerleave', function () {
-        layers.forEach(function (g) { g.style.transform = ''; });
-        if (follow) { follow.classList.remove('on'); follow.style.transform = ''; }
-      });
+      heroBox.addEventListener('pointerleave', function () { media.style.transform = ''; });
     }
 
     /* cards lean toward the cursor and catch the light */
